@@ -32,7 +32,6 @@ data:
         provider_type: remote::ollama
         config:
           url: ${env.OLLAMA_URL:http://localhost:11434}
-          model: ${env.INFERENCE_MODEL}
       - provider_id: sentence-transformers
         provider_type: inline::sentence-transformers
         config: {}
@@ -109,7 +108,17 @@ data:
         provider_type: remote::model-context-protocol
         config: {}
     metadata_store: null
-    models: []
+    models:
+    - metadata: {}
+      model_id: ${env.INFERENCE_MODEL}
+      provider_id: ollama
+      model_type: llm
+    - metadata:
+        embedding_dimension: 384
+      model_id: all-MiniLM-L6-v2
+      provider_id: ollama
+      provider_model_id: all-minilm:latest
+      model_type: embedding
     shields: []
     vector_dbs: []
     datasets: []
