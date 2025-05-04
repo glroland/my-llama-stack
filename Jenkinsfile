@@ -27,7 +27,7 @@ pipeline
       {
          steps 
          {
-            sh 'build.sh'
+            sh '/bin/bash build.sh'
          }
       }
 
