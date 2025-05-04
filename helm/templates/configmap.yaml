@@ -68,14 +68,14 @@ data:
             namespace: null
             db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/my-llama-stack}/meta_reference_eval.db
       datasetio:
-      - provider_id: huggingface-0
+      - provider_id: huggingface
         provider_type: remote::huggingface
         config:
           kvstore:
             type: sqlite
             namespace: null
             db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/my-llama-stack}/huggingface_datasetio.db
-      - provider_id: localfs-1
+      - provider_id: localfs
         provider_type: inline::localfs
         config:
           kvstore:
@@ -83,26 +83,26 @@ data:
             namespace: null
             db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/my-llama-stack}/localfs_datasetio.db
       scoring:
-      - provider_id: basic-0
+      - provider_id: basic
         provider_type: inline::basic
         config: {}
-      - provider_id: llm-as-judge-1
+      - provider_id: llm-as-judge
         provider_type: inline::llm-as-judge
         config: {}
-      - provider_id: braintrust-2
+      - provider_id: braintrust
         provider_type: inline::braintrust
         config:
           openai_api_key: ${env.OPENAI_API_KEY:}
       tool_runtime:
-      - provider_id: tavily-search-0
+      - provider_id: tavily-search
         provider_type: remote::tavily-search
         config:
           api_key: ${env.TAVILY_SEARCH_API_KEY:}
           max_results: 3
-      - provider_id: rag-runtime-1
+      - provider_id: rag-runtime
         provider_type: inline::rag-runtime
         config: {}
-      - provider_id: model-context-protocol-2
+      - provider_id: model-context-protocol
         provider_type: remote::model-context-protocol
         config: {}
     metadata_store: null
