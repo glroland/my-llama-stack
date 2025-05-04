@@ -27,7 +27,7 @@ distribution_spec:
     - inline::braintrust
     tool_runtime:
     - remote::tavily-search
-    - inline::code-interpreter
+#    - inline::code-interpreter
     - inline::rag-runtime
     - remote::model-context-protocol
 image_type: container
