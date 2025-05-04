@@ -1,0 +1,123 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-llama-stack.fullname" . }}
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"{{ .Release.Name }}-log-svc"}]'
+  labels:
+    app.kubernetes.io/part-of: "{{ .Release.Name }}-my-llama-stack"
+    {{- include "my-llama-stack.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "my-llama-stack.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "my-llama-stack.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if eq .Values.image.usePullSecret true }}
+      imagePullSecrets:
+      - name: {{ include "my-llama-stack.fullname" . }}-pull-secret
+      {{- end }}
+      {{ if eq .Values.useServiceAccount true }}
+      serviceAccountName: {{ include "my-llama-stack.fullname" . }}
+      {{ end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: {{ .Values.image.port }}
+          env:
+            - name: LLAMA_STACK_PORT
+              value: "{{ .Values.image.port }}"
+            - name: INFERENCE_MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: INFERENCE_MODEL
+            - name: EMBEDDING_MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: EMBEDDING_MODEL
+            - name: OLLAMA_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: OLLAMA_URL
+            - name: MILVUS_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: MILVUS_ENDPOINT
+            - name: MILVUS_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: MILVUS_TOKEN
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          volumeMounts:
+          - mountPath: /projects/static/home
+            name: home-config
+            readOnly: true
+          - mountPath: /projects/static/learning-paths
+            name: learning-paths-config
+            readOnly: true
+          - mountPath: /projects/static/tech-radar
+            name: tech-radar-config
+            readOnly: true
+          readinessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.image.port }}
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          livenessProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.image.port }}
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          startupProbe:
+            httpGet:
+              path: /
+              port: {{ .Values.image.port }}
+              scheme: HTTP
+            timeoutSeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            failureThreshold: 3
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

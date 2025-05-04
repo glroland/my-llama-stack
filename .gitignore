@@ -175,3 +175,4 @@ cython_debug/
 
 my-llama-stack
 
+.DS_Store
