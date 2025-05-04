@@ -6,7 +6,7 @@ metadata:
     {{- include "my-llama-stack.labels" . | nindent 4 }}
 immutable: false
 data:
-  INFERENCE_MODEL: "meta-llama/Llama-3.2-11B-Vision-Instruct"
+  INFERENCE_MODEL: "meta-llama/Llama-3.2-3B-Instruct"
   EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
   OLLAMA_URL: "http://envision.home.glroland.com:11434"
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
@@ -33,6 +33,9 @@ data:
         config:
           url: ${env.OLLAMA_URL:http://localhost:11434}
           model: ${env.INFERENCE_MODEL}
+      - provider_id: sentence-transformers
+        provider_type: inline::sentence-transformers
+        config: {}
       vector_io:
       - provider_id: milvus
         provider_type: remote::milvus
