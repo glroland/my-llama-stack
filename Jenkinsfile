@@ -23,14 +23,6 @@ pipeline
          }
       }
 
-      stage('Remove prior build') 
-      {
-         steps 
-         {
-            sh 'docker rmi my-llama-stack:0.2.5'
-         }
-      }
-
       stage('Build Llama Stack Image') 
       {
          steps 
