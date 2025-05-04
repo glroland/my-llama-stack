@@ -4,9 +4,11 @@ distribution_spec:
   container_image: null
   providers:
     inference:
-    - inline::meta-reference
+    - remote::ollama
+#    - remote::vllm
+#    - remote::openai
     vector_io:
-    - inline::faiss
+#    - inline::faiss
     - remote::milvus
     safety:
     - inline::llama-guard
