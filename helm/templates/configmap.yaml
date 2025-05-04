@@ -6,7 +6,7 @@ metadata:
     {{- include "my-llama-stack.labels" . | nindent 4 }}
 immutable: false
 data:
-  INFERENCE_MODEL: "llama3.2-vision"
+  INFERENCE_MODEL: "llama3.2-vision:11b-instruct-fp16"
   EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
   OLLAMA_URL: "http://envision.home.glroland.com:11434"
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
