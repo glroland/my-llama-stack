@@ -5,11 +5,13 @@ distribution_spec:
   providers:
     inference:
     - remote::ollama
+    - inline::sentence-transformers
 #    - remote::vllm
 #    - remote::openai
     vector_io:
 #    - inline::faiss
     - remote::milvus
+#    - remote::pgvector
     safety:
     - inline::llama-guard
     agents:
@@ -27,7 +29,6 @@ distribution_spec:
     - inline::braintrust
     tool_runtime:
     - remote::tavily-search
-#    - inline::code-interpreter
     - inline::rag-runtime
     - remote::model-context-protocol
 image_type: container
