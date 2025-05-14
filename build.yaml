@@ -9,7 +9,7 @@ distribution_spec:
 #    - remote::vllm
 #    - remote::openai
     vector_io:
-#    - inline::faiss
+    - inline::faiss
     - remote::milvus
 #    - remote::pgvector
     safety:
