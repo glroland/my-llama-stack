@@ -36,6 +36,13 @@ data:
         provider_type: inline::sentence-transformers
         config: {}
       vector_io:
+      - provider_id: faiss
+        provider_type: inline::faiss
+        config:
+          kvstore:
+            type: sqlite
+            namespace: null
+            db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/my-llama-stack}/faiss_store.db
       - provider_id: milvus
         provider_type: remote::milvus
         config:
