@@ -43,6 +43,8 @@ spec:
           env:
             - name: LLAMA_STACK_PORT
               value: "{{ .Values.image.port }}"
+            - name: LLAMA_STACK_LOGGING
+              value: "all=debug"
             - name: INFERENCE_MODEL
               valueFrom:
                 configMapKeyRef:
