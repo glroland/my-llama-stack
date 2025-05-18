@@ -40,7 +40,11 @@ pipeline
                   userRemoteConfigs: [[url: 'https://github.com/meta-llama/llama-stack.git']])
                
                // install the dependencies
-               sh 'uv pip install -e .'
+               sh """
+                  uv venv my-llama-stack --python 3.11
+                  . my-llama-stack/bin/activate
+                  uv pip install -e .
+                  """
             }
 
             // copy new template over to llama stack distro templates
@@ -54,7 +58,10 @@ pipeline
          {
             dir('target')
             {
-               sh 'lama stack build --template my-llama-stack-template --image-type container'
+               sh """
+                  . my-llama-stack/bin/activate
+                  lama stack build --template my-llama-stack-template --image-type container
+                  """
             }
          }
       }
