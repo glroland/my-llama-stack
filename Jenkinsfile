@@ -46,9 +46,6 @@ pipeline
                   uv pip install -e .
                   """
             }
-
-            // copy new template over to llama stack distro templates
-            sh 'cp -Rp my-llama-stack-template target/llama_stack/templates/'
          }
       }
 
@@ -60,7 +57,7 @@ pipeline
             {
                sh """
                   . my-llama-stack/bin/activate
-                  llama stack build --template my-llama-stack-template --image-type container
+                  llama stack build --config build.yaml --image-type container --image-name distribution-my-llama-stack
                   """
             }
          }
