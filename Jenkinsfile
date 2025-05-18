@@ -53,13 +53,10 @@ pipeline
       {
          steps 
          {
-            dir('target')
-            {
-               sh """
-                  . my-llama-stack/bin/activate
-                  llama stack build --config build.yaml --image-type container --image-name distribution-my-llama-stack
-                  """
-            }
+            sh """
+               . target/my-llama-stack/bin/activate
+               llama stack build --config build.yaml --image-type container --image-name distribution-my-llama-stack
+               """
          }
       }
 
