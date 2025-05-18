@@ -15,26 +15,26 @@ data:
   run.yaml: |-
     version: '2'
     image_name: my-llama-stack
+    container_image: my-llama-stack
     apis:
-    - agents
-    - datasetio
-    - eval
     - inference
-    - post_training
-    - safety
-    - scoring
-    - telemetry
-    - tool_runtime
     - vector_io
+    - safety
+    - agents
+    - telemetry
+    - eval
+    - datasetio
+    - scoring
+    - tool_runtime
     providers:
       inference:
       - provider_id: ollama
         provider_type: remote::ollama
         config:
           url: ${env.OLLAMA_URL:http://localhost:11434}
-      #- provider_id: sentence-transformers
-      #  provider_type: inline::sentence-transformers
-      #  config: {}
+      - provider_id: sentence-transformers
+        provider_type: inline::sentence-transformers
+        config: {}
       vector_io:
       - provider_id: faiss
         provider_type: inline::faiss
@@ -43,11 +43,11 @@ data:
             type: sqlite
             namespace: null
             db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/my-llama-stack}/faiss_store.db
-      #- provider_id: milvus
-      #  provider_type: remote::milvus
-      #  config:
-      #    uri: ${env.MILVUS_ENDPOINT}
-      #    token: ${env.MILVUS_TOKEN}
+      - provider_id: milvus
+        provider_type: remote::milvus
+        config:
+          uri: ${env.MILVUS_ENDPOINT}
+          token: ${env.MILVUS_TOKEN}
       safety:
       - provider_id: llama-guard
         provider_type: inline::llama-guard
@@ -102,19 +102,7 @@ data:
         provider_type: inline::braintrust
         config:
           openai_api_key: ${env.OPENAI_API_KEY:}
-      post_training:
-      - provider_id: huggingface
-        provider_type: inline::huggingface
-        config:
-          checkpoint_format: huggingface
-          distributed_backend: null
-          device: cpu
       tool_runtime:
-      - provider_id: brave-search
-        provider_type: remote::brave-search
-        config:
-          api_key: ${env.BRAVE_SEARCH_API_KEY:}
-          max_results: 3
       - provider_id: tavily-search
         provider_type: remote::tavily-search
         config:
@@ -126,13 +114,7 @@ data:
       - provider_id: model-context-protocol
         provider_type: remote::model-context-protocol
         config: {}
-      - provider_id: wolfram-alpha
-        provider_type: remote::wolfram-alpha
-        config:
-          api_key: ${env.WOLFRAM_ALPHA_API_KEY:}
-    metadata_store:
-      type: sqlite
-      db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/my-llama-stack}/registry.db
+    metadata_store: null
     models:
     - metadata: {}
       model_id: ${env.INFERENCE_MODEL}
@@ -154,7 +136,10 @@ data:
       provider_id: tavily-search
     - toolgroup_id: builtin::rag
       provider_id: rag-runtime
-    - toolgroup_id: builtin::wolfram_alpha
-      provider_id: wolfram-alpha
+    logging: null
     server:
       port: 8321
+      tls_certfile: null
+      tls_keyfile: null
+      auth: null
+    external_providers_dir: null

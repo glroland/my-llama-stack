@@ -9,7 +9,7 @@ serviceAccount:
 image:
   repository: registry.home.glroland.com/ai/
   name: my-llama-stack
-  tag: 21
+  tag: 11
   usePullSecret: false
   pullPolicy: IfNotPresent
   port: 8080
