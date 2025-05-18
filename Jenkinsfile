@@ -23,6 +23,14 @@ pipeline
          }
       }
 
+      stage('Ensure Prior Build Artifacts are Purged') 
+      {
+         steps 
+         {
+            sh '/bin/bash rm -rf target'
+         }
+      }
+
       stage('Build Llama Stack Image') 
       {
          steps 
@@ -35,11 +43,11 @@ pipeline
       {
          steps 
          {
-            sh 'docker tag my-llama-stack:0.2.6 my-llama-stack:$BUILD_NUMBER'
+            sh 'docker tag my-llama-stack:0.2.7 my-llama-stack:$BUILD_NUMBER'
             sh 'docker save my-llama-stack:$BUILD_NUMBER > my-llama-stack-dockerimage.tar'
             step(followSymlinks: false, artifacts: 'my-llama-stack-dockerimage.tar', $class: 'ArtifactArchiver')
             sh 'docker rmi my-llama-stack:$BUILD_NUMBER'
-            sh 'docker rmi my-llama-stack:0.2.6'
+            sh 'docker rmi my-llama-stack:0.2.7'
          }
       }
 
