@@ -60,7 +60,7 @@ pipeline
             {
                sh """
                   . my-llama-stack/bin/activate
-                  lama stack build --template my-llama-stack-template --image-type container
+                  llama stack build --template my-llama-stack-template --image-type container
                   """
             }
          }
