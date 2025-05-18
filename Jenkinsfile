@@ -43,13 +43,16 @@ pipeline
                sh 'uv pip install -e .'
             }
 
+            dir('target/llama_stack/templates/my-llama-stack-template')
+            {
+               sh 'pwd -P'
+            }
+
             // copy new template over to llama stack distro templates
-            fileOperations([fileCopyOperation(
-               excludes: '',
-               flattenFiles: false,
-               includes: 'my-llama-stack-template/**',
-               targetLocation: "target/llama_stack/templates/my-llama-stack-template"
-               )])
+            fileOperations([
+                    fileCopyOperation(sourceFiles: 'my-llama-stack-template/**', 
+                                      targetLocation: 'target/llama_stack/templates/my-llama-stack-template/')
+                ])
          }
       }
 
