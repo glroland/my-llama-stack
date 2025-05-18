@@ -23,14 +23,36 @@ pipeline
          }
       }
 
-      stage('Ensure Prior Build Artifacts are Purged') 
+      stage('Prepare for LLama Stack Build') 
       {
          steps 
          {
             dir('target')
             {
+               // recreate artifact directory
                deleteDir()
+               sh 'pwd -P'
+
+               // checkout llama stack source
+               checkout scmGit(
+                  branches: [[name: '*/main']],
+                  extensions: [ cloneOption(shallow: true) ],
+                  userRemoteConfigs: [[url: 'https://github.com/meta-llama/llama-stack.git']])
+               
+               // install the dependencies
+               dir ('llama-stack')
+               {
+                  sh 'uv pip install -e .'
+               }
             }
+
+            // copy new template over to llama stack distro templates
+            fileOperations([fileCopyOperation(
+               excludes: '',
+               flattenFiles: false,
+               includes: 'my-llama-stack-template/**',
+               targetLocation: "target/llama-stack/llama_stack/templates/my-llama-stack-template"
+               )])
          }
       }
 
@@ -38,7 +60,10 @@ pipeline
       {
          steps 
          {
-            sh '/bin/bash build.sh'
+            dir('target/llama-stack')
+            {
+               sh 'lama stack build --template my-llama-stack-template --image-type container'
+            }
          }
       }
 
