@@ -9,7 +9,7 @@ serviceAccount:
 image:
   repository: docker.io/llamastack/
   name: distribution-ollama
-  tag: 0.2.6
+  tag: 0.2.7
   usePullSecret: false
   pullPolicy: IfNotPresent
   port: 8080
