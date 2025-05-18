@@ -27,7 +27,10 @@ pipeline
       {
          steps 
          {
-            sh '/bin/bash rm -rf target'
+            dir('target')
+            {
+               deleteDir
+            }
          }
       }
 
