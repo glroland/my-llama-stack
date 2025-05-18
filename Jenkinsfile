@@ -29,7 +29,7 @@ pipeline
          {
             dir('target')
             {
-               deleteDir
+               deleteDir()
             }
          }
       }
