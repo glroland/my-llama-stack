@@ -40,10 +40,7 @@ pipeline
                   userRemoteConfigs: [[url: 'https://github.com/meta-llama/llama-stack.git']])
                
                // install the dependencies
-               dir ('llama-stack')
-               {
-                  sh 'uv pip install -e .'
-               }
+               sh 'uv pip install -e .'
             }
 
             // copy new template over to llama stack distro templates
@@ -51,7 +48,7 @@ pipeline
                excludes: '',
                flattenFiles: false,
                includes: 'my-llama-stack-template/**',
-               targetLocation: "target/llama-stack/llama_stack/templates/my-llama-stack-template"
+               targetLocation: "target/llama_stack/templates/my-llama-stack-template"
                )])
          }
       }
@@ -60,7 +57,7 @@ pipeline
       {
          steps 
          {
-            dir('target/llama-stack')
+            dir('target')
             {
                sh 'lama stack build --template my-llama-stack-template --image-type container'
             }
