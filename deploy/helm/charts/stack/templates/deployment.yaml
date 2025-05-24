@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "my-llama-stack-ui.fullname" . }}
+  name: {{ include "stack.fullname" . }}
   annotations:
-    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"{{ .Release.Name }}"}]'
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"{{ .Release.Name }}-log-svc"}]'
   labels:
-    app.kubernetes.io/part-of: "{{ .Release.Name }}-my-llama-stack-ui"
-    {{- include "my-llama-stack-ui.labels" . | nindent 4 }}
+    app.kubernetes.io/part-of: "{{ .Release.Name }}-stack"
+    {{- include "stack.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}-ui
+  {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "my-llama-stack-ui.selectorLabels" . | nindent 6 }}
+      {{- include "stack.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -21,14 +21,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "my-llama-stack-ui.selectorLabels" . | nindent 8 }}
+        {{- include "stack.selectorLabels" . | nindent 8 }}
     spec:
       {{- if eq .Values.image.usePullSecret true }}
       imagePullSecrets:
-      - name: {{ include "my-llama-stack-ui.fullname" . }}-pull-secret
+      - name: {{ include "stack.fullname" . }}-pull-secret
       {{- end }}
       {{ if eq .Values.useServiceAccount true }}
-      serviceAccountName: {{ include "my-llama-stack-ui.fullname" . }}
+      serviceAccountName: {{ include "stack.fullname" . }}
       {{ end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -41,35 +41,50 @@ spec:
           ports:
           - containerPort: {{ .Values.image.port }}
           env:
-            - name: LLAMA_STACK_ENDPOINT
+            - name: LLAMA_STACK_PORT
+              value: "{{ .Values.image.port }}"
+            - name: LLAMA_STACK_LOGGING
+              value: "all=info"
+            - name: INFERENCE_MODEL
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "my-llama-stack-ui.fullname" . }}
-                  key: LLAMA_STACK_ENDPOINT
-            - name: FIREWORKS_API_KEY
+                  name: {{ include "stack.fullname" . }}
+                  key: INFERENCE_MODEL
+            - name: EMBEDDING_MODEL
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "my-llama-stack-ui.fullname" . }}
-                  key: FIREWORKS_API_KEY
-            - name: TOGETHER_API_KEY
+                  name: {{ include "stack.fullname" . }}
+                  key: EMBEDDING_MODEL
+            - name: OLLAMA_URL
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "my-llama-stack-ui.fullname" . }}
-                  key: TOGETHER_API_KEY
-            - name: SAMBANOVA_API_KEY
+                  name: {{ include "stack.fullname" . }}
+                  key: OLLAMA_URL
+            - name: MILVUS_ENDPOINT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "my-llama-stack-ui.fullname" . }}
-                  key: SAMBANOVA_API_KEY
-            - name: OPENAI_API_KEY
+                  name: {{ include "stack.fullname" . }}
+                  key: MILVUS_ENDPOINT
+            - name: MILVUS_TOKEN
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "my-llama-stack-ui.fullname" . }}
-                  key: OPENAI_API_KEY
+                  name: {{ include "stack.fullname" . }}
+                  key: MILVUS_TOKEN
+          volumeMounts:
+            - name: run-override
+              mountPath: /app/run.yaml
+              subPath: run.yaml
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: run-override
+          configMap:
+            name: {{ include "stack.fullname" . }}
+            items:
+              - key: run.yaml
+                path: run.yaml
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

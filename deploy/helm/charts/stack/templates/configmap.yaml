@@ -1,0 +1,145 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "stack.fullname" . }}
+  labels:
+    {{- include "stack.labels" . | nindent 4 }}
+immutable: false
+data:
+  INFERENCE_MODEL: "meta-llama/Llama-3.2-11B-Vision-Instruct"
+  EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
+  OLLAMA_URL: "http://envision.home.glroland.com:11434"
+  MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
+  MILVUS_TOKEN: "root:Milvus"
+
+  run.yaml: |-
+    version: '2'
+    image_name: stack
+    container_image: stack
+    apis:
+    - inference
+    - vector_io
+    - safety
+    - agents
+    - telemetry
+    - eval
+    - datasetio
+    - scoring
+    - tool_runtime
+    providers:
+      inference:
+      - provider_id: ollama
+        provider_type: remote::ollama
+        config:
+          url: ${env.OLLAMA_URL:http://localhost:11434}
+      - provider_id: sentence-transformers
+        provider_type: inline::sentence-transformers
+        config: {}
+      vector_io:
+      - provider_id: faiss
+        provider_type: inline::faiss
+        config:
+          kvstore:
+            type: sqlite
+            namespace: null
+            db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/stack}/faiss_store.db
+      - provider_id: milvus
+        provider_type: remote::milvus
+        config:
+          uri: ${env.MILVUS_ENDPOINT}
+          token: ${env.MILVUS_TOKEN}
+      safety:
+      - provider_id: llama-guard
+        provider_type: inline::llama-guard
+        config:
+          excluded_categories: []
+      agents:
+      - provider_id: meta-reference
+        provider_type: inline::meta-reference
+        config:
+          persistence_store:
+            type: sqlite
+            namespace: null
+            db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/stack}/agents_store.db
+      telemetry:
+      - provider_id: meta-reference
+        provider_type: inline::meta-reference
+        config:
+          service_name: ${env.OTEL_SERVICE_NAME:}
+          sinks: ${env.TELEMETRY_SINKS:console,sqlite}
+          sqlite_db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/stack}/trace_store.db
+      eval:
+      - provider_id: meta-reference
+        provider_type: inline::meta-reference
+        config:
+          kvstore:
+            type: sqlite
+            namespace: null
+            db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/stack}/meta_reference_eval.db
+      datasetio:
+      - provider_id: huggingface
+        provider_type: remote::huggingface
+        config:
+          kvstore:
+            type: sqlite
+            namespace: null
+            db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/stack}/huggingface_datasetio.db
+      - provider_id: localfs
+        provider_type: inline::localfs
+        config:
+          kvstore:
+            type: sqlite
+            namespace: null
+            db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/stack}/localfs_datasetio.db
+      scoring:
+      - provider_id: basic
+        provider_type: inline::basic
+        config: {}
+      - provider_id: llm-as-judge
+        provider_type: inline::llm-as-judge
+        config: {}
+      - provider_id: braintrust
+        provider_type: inline::braintrust
+        config:
+          openai_api_key: ${env.OPENAI_API_KEY:}
+      tool_runtime:
+      - provider_id: tavily-search
+        provider_type: remote::tavily-search
+        config:
+          api_key: ${env.TAVILY_SEARCH_API_KEY:}
+          max_results: 3
+      - provider_id: rag-runtime
+        provider_type: inline::rag-runtime
+        config: {}
+      - provider_id: model-context-protocol
+        provider_type: remote::model-context-protocol
+        config: {}
+    metadata_store: null
+    models:
+    - metadata: {}
+      model_id: ${env.INFERENCE_MODEL}
+      provider_id: ollama
+      model_type: llm
+    - metadata:
+        embedding_dimension: 384
+      model_id: all-MiniLM-L6-v2
+      provider_id: ollama
+      provider_model_id: all-minilm:latest
+      model_type: embedding
+    shields: []
+    vector_dbs: []
+    datasets: []
+    scoring_fns: []
+    benchmarks: []
+    tool_groups:
+    - toolgroup_id: builtin::websearch
+      provider_id: tavily-search
+    - toolgroup_id: builtin::rag
+      provider_id: rag-runtime
+    logging: null
+    server:
+      port: 8321
+      tls_certfile: null
+      tls_keyfile: null
+      auth: null
+    external_providers_dir: null
