@@ -138,7 +138,7 @@ data:
       provider_id: rag-runtime
     logging: null
     server:
-      port: 8321
+      port: {{ .Values.image.port }}
       tls_certfile: null
       tls_keyfile: null
       auth: null
