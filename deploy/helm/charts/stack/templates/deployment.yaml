@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "stack.fullname" . }}
+  name: {{ include "my-llama-stack.fullname" . }}
   annotations:
     app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"{{ .Release.Name }}-log-svc"}]'
   labels:
-    app.kubernetes.io/part-of: "{{ .Release.Name }}-stack"
-    {{- include "stack.labels" . | nindent 4 }}
+    app.kubernetes.io/part-of: "{{ .Release.Name }}-my-llama-stack"
+    {{- include "my-llama-stack.labels" . | nindent 4 }}
 spec:
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "stack.selectorLabels" . | nindent 6 }}
+      {{- include "my-llama-stack.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -21,14 +21,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "stack.selectorLabels" . | nindent 8 }}
+        {{- include "my-llama-stack.selectorLabels" . | nindent 8 }}
     spec:
       {{- if eq .Values.image.usePullSecret true }}
       imagePullSecrets:
-      - name: {{ include "stack.fullname" . }}-pull-secret
+      - name: {{ include "my-llama-stack.fullname" . }}-pull-secret
       {{- end }}
       {{ if eq .Values.useServiceAccount true }}
-      serviceAccountName: {{ include "stack.fullname" . }}
+      serviceAccountName: {{ include "my-llama-stack.fullname" . }}
       {{ end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -41,34 +41,34 @@ spec:
           ports:
           - containerPort: {{ .Values.image.port }}
           env:
-            - name: LLAMA_STACK_PORT
+            - name: LLAMA_my-llama-stack_PORT
               value: "{{ .Values.image.port }}"
-            - name: LLAMA_STACK_LOGGING
+            - name: LLAMA_my-llama-stack_LOGGING
               value: "all=info"
             - name: INFERENCE_MODEL
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "stack.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: INFERENCE_MODEL
             - name: EMBEDDING_MODEL
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "stack.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: EMBEDDING_MODEL
             - name: OLLAMA_URL
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "stack.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: OLLAMA_URL
             - name: MILVUS_ENDPOINT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "stack.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: MILVUS_ENDPOINT
             - name: MILVUS_TOKEN
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "stack.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: MILVUS_TOKEN
           volumeMounts:
             - name: run-override
@@ -81,7 +81,7 @@ spec:
       volumes:
         - name: run-override
           configMap:
-            name: {{ include "stack.fullname" . }}
+            name: {{ include "my-llama-stack.fullname" . }}
             items:
               - key: run.yaml
                 path: run.yaml

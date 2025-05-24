@@ -1,19 +1,19 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ include "ui.fullname" . }}
+  name: {{ include "my-llama-stack.fullname" . }}
   annotations:
     app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"{{ .Release.Name }}"}]'
   labels:
-    app.kubernetes.io/part-of: "{{ .Release.Name }}-ui"
-    {{- include "ui.labels" . | nindent 4 }}
+    app.kubernetes.io/part-of: "{{ .Release.Name }}-my-llama-stack"
+    {{- include "my-llama-stack.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.autoscaling.enabled }}-ui
+  {{- if not .Values.autoscaling.enabled }}-my-llama-stack
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   selector:
     matchLabels:
-      {{- include "ui.selectorLabels" . | nindent 6 }}
+      {{- include "my-llama-stack.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}
@@ -21,14 +21,14 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
-        {{- include "ui.selectorLabels" . | nindent 8 }}
+        {{- include "my-llama-stack.selectorLabels" . | nindent 8 }}
     spec:
       {{- if eq .Values.image.usePullSecret true }}
       imagePullSecrets:
-      - name: {{ include "ui.fullname" . }}-pull-secret
+      - name: {{ include "my-llama-stack.fullname" . }}-pull-secret
       {{- end }}
       {{ if eq .Values.useServiceAccount true }}
-      serviceAccountName: {{ include "ui.fullname" . }}
+      serviceAccountName: {{ include "my-llama-stack.fullname" . }}
       {{ end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
@@ -44,27 +44,27 @@ spec:
             - name: LLAMA_STACK_ENDPOINT
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "ui.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: LLAMA_STACK_ENDPOINT
             - name: FIREWORKS_API_KEY
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "ui.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: FIREWORKS_API_KEY
             - name: TOGETHER_API_KEY
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "ui.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: TOGETHER_API_KEY
             - name: SAMBANOVA_API_KEY
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "ui.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: SAMBANOVA_API_KEY
             - name: OPENAI_API_KEY
               valueFrom:
                 configMapKeyRef:
-                  name: {{ include "ui.fullname" . }}
+                  name: {{ include "my-llama-stack.fullname" . }}
                   key: OPENAI_API_KEY
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File

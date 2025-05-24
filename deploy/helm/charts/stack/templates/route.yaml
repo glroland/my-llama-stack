@@ -2,20 +2,20 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   annotations:
-    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"stack"}]'
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"my-llama-stack"}]'
   labels:
     app: svc
-    app.kubernetes.io/component: stack
-    app.kubernetes.io/instance: stack
-    app.kubernetes.io/name: stack
-    app.kubernetes.io/part-of: stack
-  name: {{ include "stack.fullname" . }}
+    app.kubernetes.io/component: my-llama-stack
+    app.kubernetes.io/instance: my-llama-stack
+    app.kubernetes.io/name: my-llama-stack
+    app.kubernetes.io/part-of: my-llama-stack
+  name: {{ include "my-llama-stack.fullname" . }}
 spec:
   port:
     targetPort: {{ .Values.service.port }}
   to:
     kind: Service
-    name: {{ include "stack.fullname" . }}
+    name: {{ include "my-llama-stack.fullname" . }}
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Allow
