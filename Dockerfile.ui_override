@@ -11,4 +11,4 @@ EXPOSE 8080
 
 RUN pip install llama_stack[ui]
 
-ENTRYPOINT ["streamlit", "run", "/usr/local/lib/python3.10/site-packages/llama_stack/distribution/ui/app.py", "--server.port=8080", "--server.address=0.0.0.0", "--global.logLevel=debug"]
+ENTRYPOINT ["streamlit", "run", "/usr/local/lib/python3.10/site-packages/llama_stack/distribution/ui/app.py", "--server.port=8080", "--server.address=0.0.0.0", "--logger.level=debug"]
