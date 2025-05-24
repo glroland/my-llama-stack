@@ -42,7 +42,7 @@ spec:
           - containerPort: {{ .Values.image.port }}
           env:
             - name: LLAMA_STACK_ENDPOINT
-              value: "http://{{ .Release.Name }}-stack:{{ .Values.image.port }}"
+              value: "http://{{ .Release.Name }}:{{ .Values.image.port }}"
             - name: FIREWORKS_API_KEY
               valueFrom:
                 configMapKeyRef:
