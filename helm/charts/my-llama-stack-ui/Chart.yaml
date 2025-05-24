@@ -1,6 +1,6 @@
 apiVersion: v2
-name: ollama-llama-stack
-description: My Customized Distribution of Llama Stack
+name: my-llama-stack
+description: My LLama Stack Distribution Helm Cart
 
 # A chart can be either an 'application' or a 'library' chart.
 #

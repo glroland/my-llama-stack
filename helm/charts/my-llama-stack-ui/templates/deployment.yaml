@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "my-llama-stack-ui.fullname" . }}
+  annotations:
+    app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"{{ .Release.Name }}"}]'
+  labels:
+    app.kubernetes.io/part-of: "{{ .Release.Name }}-my-llama-stack-ui"
+    {{- include "my-llama-stack-ui.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}-ui
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "my-llama-stack-ui.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      labels:
+        {{- include "my-llama-stack-ui.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- if eq .Values.image.usePullSecret true }}
+      imagePullSecrets:
+      - name: {{ include "my-llama-stack-ui.fullname" . }}-pull-secret
+      {{- end }}
+      {{ if eq .Values.useServiceAccount true }}
+      serviceAccountName: {{ include "my-llama-stack-ui.fullname" . }}
+      {{ end }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}{{ .Values.image.name }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+          - containerPort: {{ .Values.image.port }}
+          env:
+            - name: LLAMA_STACK_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack-ui.fullname" . }}
+                  key: LLAMA_STACK_ENDPOINT
+            - name: FIREWORKS_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack-ui.fullname" . }}
+                  key: FIREWORKS_API_KEY
+            - name: TOGETHER_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack-ui.fullname" . }}
+                  key: TOGETHER_API_KEY
+            - name: SAMBANOVA_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack-ui.fullname" . }}
+                  key: SAMBANOVA_API_KEY
+            - name: OPENAI_API_KEY
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack-ui.fullname" . }}
+                  key: OPENAI_API_KEY
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

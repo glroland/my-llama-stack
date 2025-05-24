@@ -8,7 +8,6 @@ serviceAccount:
 
 image:
   repository: registry.home.glroland.com/ai/
-  name: my-llama-stack
   tag: 28
   usePullSecret: false
   pullPolicy: IfNotPresent

@@ -1,17 +1,7 @@
 replicaCount: 1
 
-serviceAccount:
-  create: true
-  annotations: {}
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
-
 image:
-  repository: docker.io/llamastack/
-  name: distribution-ollama
-  tag: 0.2.7
-  usePullSecret: false
-  pullPolicy: IfNotPresent
+  name: my-llama-stack-ui
   port: 8080
 
 nameOverride: ""
@@ -26,11 +16,11 @@ ingress:
 
 resources: 
   limits:
-    cpu: 2000m
-    memory: 1Gi
+    cpu: 5000m
+    memory: 4Gi
   requests:
-    cpu: 2000m
-    memory: 1Gi
+    cpu: 5000m
+    memory: 4Gi
 
 autoscaling:
   enabled: false

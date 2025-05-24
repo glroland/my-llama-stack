@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "my-llama-stack-ui.fullname" . }}
+  labels:
+    {{- include "my-llama-stack-ui.labels" . | nindent 4 }}
+immutable: false
+data:
+  LLAMA_STACK_ENDPOINT: "http://envision:8321"
+  FIREWORKS_API_KEY: ""
+  TOGETHER_API_KEY: ""
+  SAMBANOVA_API_KEY: ""
+  OPENAI_API_KEY: "nokeyneeded"
