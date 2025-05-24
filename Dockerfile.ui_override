@@ -1,0 +1,13 @@
+FROM distribution-my-llama-stack:0.2.7
+
+ENV LLAMA_STACK_ENDPOINT "http://envision:8321"
+ENV FIREWORKS_API_KEY ""
+ENV TOGETHER_API_KEY ""
+ENV SAMBANOVA_API_KEY ""
+ENV OPENAI_API_KEY ""
+
+EXPOSE 8080
+
+RUN pip install llama_stack[ui]
+
+ENTRYPOINT ["streamlit", "run", "/usr/local/lib/python3.10/site-packages/llama_stack/distribution/ui/app.py", "--server.port=8080", "--server.address=0.0.0.0"]

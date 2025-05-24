@@ -60,6 +60,14 @@ pipeline
          }
       }
 
+      stage('Build LLama Stack UI Image') 
+      {
+         steps 
+         {
+            sh 'docker build -t my-llama-stack-ui:$BUILD_NUMBER -f Dockerfile.ui_override .'
+         }
+      }
+
       stage('Publish Llama Stack Image') 
       {
          steps 
@@ -72,7 +80,17 @@ pipeline
          }
       }
 
-      stage('Reload then push images to quay') 
+      stage('Publish Llama Stack UI Image') 
+      {
+         steps 
+         {
+            sh 'docker save my-llama-stack-ui:$BUILD_NUMBER > my-llama-stack-ui-dockerimage.tar'
+            step(followSymlinks: false, artifacts: 'my-llama-stack-ui-dockerimage.tar', $class: 'ArtifactArchiver')
+            sh 'docker rmi my-llama-stack-ui:$BUILD_NUMBER'
+         }
+      }
+
+      stage('Reload then push LLama Stack image to quay') 
       {
          steps 
          {
@@ -85,6 +103,24 @@ pipeline
                   sh 'docker rmi my-llama-stack:$BUILD_NUMBER'
                   sh 'docker push registry.home.glroland.com/ai/my-llama-stack:$BUILD_NUMBER'
                   sh 'docker rmi registry.home.glroland.com/ai/my-llama-stack:$BUILD_NUMBER'
+               }
+            }
+         }
+      }
+
+      stage('Reload then push LLama Stack UI image to quay') 
+      {
+         steps 
+         {
+            script 
+            {
+               docker.withRegistry('https://registry.home.glroland.com/', 'quay') 
+               {
+                  sh 'docker load -i my-llama-stack-ui-dockerimage.tar'
+                  sh 'docker tag my-llama-stack-ui:$BUILD_NUMBER registry.home.glroland.com/ai/my-llama-stack-ui:$BUILD_NUMBER'
+                  sh 'docker rmi my-llama-stack-ui:$BUILD_NUMBER'
+                  sh 'docker push registry.home.glroland.com/ai/my-llama-stack-ui:$BUILD_NUMBER'
+                  sh 'docker rmi registry.home.glroland.com/ai/my-llama-stack-ui:$BUILD_NUMBER'
                }
             }
          }
