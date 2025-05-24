@@ -11,3 +11,4 @@ data:
   TOGETHER_API_KEY: ""
   SAMBANOVA_API_KEY: ""
   OPENAI_API_KEY: "nokeyneeded"
+  TAVILY_SEARCH_API_KEY: ""

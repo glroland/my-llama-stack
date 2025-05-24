@@ -5,9 +5,10 @@ ENV FIREWORKS_API_KEY ""
 ENV TOGETHER_API_KEY ""
 ENV SAMBANOVA_API_KEY ""
 ENV OPENAI_API_KEY ""
+ENV TAVILY_SEARCH_API_KEY ""
 
 EXPOSE 8080
 
 RUN pip install llama_stack[ui]
 
-ENTRYPOINT ["streamlit", "run", "/usr/local/lib/python3.10/site-packages/llama_stack/distribution/ui/app.py", "--server.port=8080", "--server.address=0.0.0.0"]
+ENTRYPOINT ["streamlit", "run", "/usr/local/lib/python3.10/site-packages/llama_stack/distribution/ui/app.py", "--server.port=8080", "--server.address=0.0.0.0", "--global.logLevel=debug"]
