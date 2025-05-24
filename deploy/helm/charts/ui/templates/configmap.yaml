@@ -6,7 +6,6 @@ metadata:
     {{- include "my-llama-stack.labels" . | nindent 4 }}
 immutable: false
 data:
-  LLAMA_STACK_ENDPOINT: "http://{{ .Release.Name }}-stack:{{ .Values.image.port }}"
   FIREWORKS_API_KEY: ""
   TOGETHER_API_KEY: ""
   SAMBANOVA_API_KEY: ""
