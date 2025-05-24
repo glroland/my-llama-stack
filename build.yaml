@@ -1,17 +1,17 @@
 version: '2'
 distribution_spec:
   description: home.glroland.com's LLama Stack Distribution for Smart Lab Applications
-  container_image: registry.access.redhat.com/ubi9/python-311:9.6-1747333117
+  container_image: null #registry.access.redhat.com/ubi9/python-311:9.6-1747333117
   providers:
     inference:
     - remote::ollama
     - inline::sentence-transformers
-#    - remote::vllm
-#    - remote::openai
+    - remote::vllm
+    - remote::openai
     vector_io:
     - inline::faiss
     - remote::milvus
-#    - remote::pgvector
+    - remote::pgvector
     safety:
     - inline::llama-guard
     agents:
