@@ -1,7 +1,7 @@
 version: '2'
 distribution_spec:
-  description: Use Meta Reference for running LLM inference
-  container_image: null
+  description: home.glroland.com's LLama Stack Distribution for Smart Lab Applications
+  container_image: registry.access.redhat.com/ubi9/python-311:9.6-1747333117
   providers:
     inference:
     - remote::ollama
