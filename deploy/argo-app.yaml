@@ -8,7 +8,7 @@ spec:
     namespace: my-llama-stack
     server: 'https://kubernetes.default.svc'
   source:
-    path: helm
+    path: deploy/helm
     repoURL: 'https://github.com/glroland/my-llama-stack.git'
     targetRevision: HEAD
     helm:
