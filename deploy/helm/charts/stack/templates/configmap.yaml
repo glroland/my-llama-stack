@@ -137,7 +137,13 @@ data:
       provider_id: tavily-search
     - toolgroup_id: builtin::rag
       provider_id: rag-runtime
-    logging: null
+    - toolgroup_id: agent-team
+      provider_id: model-context-protocol
+      mcp_endpoint: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/sse
+    - toolgroup_id: agent-weather
+      provider_id: model-context-protocol
+      mcp_endpoint: https://baseball-chatbot-agent-weather-baseball-chatbot.apps.ocp.home.glroland.com/sse
+    logging: all=info
     server:
       port: {{ .Values.image.port }}
       tls_certfile: null
