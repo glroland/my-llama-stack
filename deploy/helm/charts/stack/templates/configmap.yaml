@@ -11,6 +11,7 @@ data:
   OLLAMA_URL: "http://envision.home.glroland.com:11434"
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
   MILVUS_TOKEN: "root:Milvus"
+  LLAMA_STACK_LOGGING: "all=debug"
 
   run.yaml: |-
     version: '2'

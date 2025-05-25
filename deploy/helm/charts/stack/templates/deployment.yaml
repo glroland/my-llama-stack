@@ -44,7 +44,10 @@ spec:
             - name: LLAMA_STACK_PORT
               value: "{{ .Values.image.port }}"
             - name: LLAMA_STACK_LOGGING
-              value: "all=info"
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: LLAMA_STACK_LOGGING
             - name: INFERENCE_MODEL
               valueFrom:
                 configMapKeyRef:
