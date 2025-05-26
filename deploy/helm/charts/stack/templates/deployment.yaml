@@ -43,6 +43,8 @@ spec:
           env:
             - name: LLAMA_STACK_PORT
               value: "{{ .Values.image.port }}"
+            - name: TIKTOKEN_CACHE_DIR
+              value: "/tmp"
             - name: LLAMA_STACK_LOGGING
               valueFrom:
                 configMapKeyRef:
