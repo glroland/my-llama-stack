@@ -73,6 +73,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "my-llama-stack.fullname" . }}
                   key: MILVUS_TOKEN
+            - name: OPENAI_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: OPENAI_API_KEY
           volumeMounts:
             - name: run-override
               mountPath: /app/run.yaml
@@ -88,6 +93,10 @@ spec:
             items:
               - key: run.yaml
                 path: run.yaml
+        - name: app-secrets
+          secret:
+            secretName: app-secrets
+            optional: true
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
