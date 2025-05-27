@@ -43,8 +43,6 @@ spec:
           env:
             - name: LLAMA_STACK_PORT
               value: "{{ .Values.image.port }}"
-            - name: TIKTOKEN_CACHE_DIR
-              value: ""
             - name: LLAMA_STACK_LOGGING
               valueFrom:
                 configMapKeyRef:
@@ -80,6 +78,7 @@ spec:
                 secretKeyRef:
                   name: app-secrets
                   key: OPENAI_API_KEY
+                  optional: true
           volumeMounts:
             - name: run-override
               mountPath: /app/run.yaml
