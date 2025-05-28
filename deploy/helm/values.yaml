@@ -8,8 +8,8 @@ global:
 
   image:
     repository: registry.home.glroland.com/ai/
-#    tag: 32
-    tag: 33
+    tag: 32
+#new release has a big bug    tag: 33
     pullPolicy: IfNotPresent
     usePullSecret: true
 
