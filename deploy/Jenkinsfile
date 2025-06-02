@@ -44,6 +44,7 @@ pipeline
                   uv venv my-llama-stack --python 3.11
                   . my-llama-stack/bin/activate
                   uv pip install -e .
+                  uv pip install -r ../requirements.txt
                   """
             }
          }
