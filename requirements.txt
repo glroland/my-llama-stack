@@ -2,5 +2,6 @@ pytest
 pylint
 llama-stack-client
 llama-stack
+fastapi
 huggingface_hub[cli]
 mcp[cli]
