@@ -44,6 +44,7 @@ pipeline
                   uv venv my-llama-stack --python 3.11
                   . my-llama-stack/bin/activate
                   uv pip install -e .
+                  uv pip install -r ../requirements.txt
                   """
             }
          }
@@ -72,11 +73,11 @@ pipeline
       {
          steps 
          {
-            sh 'docker tag distribution-my-llama-stack:0.2.8 my-llama-stack:$BUILD_NUMBER'
+            sh 'docker tag distribution-my-llama-stack:0.2.9 my-llama-stack:$BUILD_NUMBER'
             sh 'docker save my-llama-stack:$BUILD_NUMBER > my-llama-stack-dockerimage.tar'
             step(followSymlinks: false, artifacts: 'my-llama-stack-dockerimage.tar', $class: 'ArtifactArchiver')
             sh 'docker rmi my-llama-stack:$BUILD_NUMBER'
-            sh 'docker rmi distribution-my-llama-stack:0.2.8'
+            sh 'docker rmi distribution-my-llama-stack:0.2.9'
          }
       }
 
