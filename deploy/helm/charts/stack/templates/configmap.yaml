@@ -6,7 +6,8 @@ metadata:
     {{- include "my-llama-stack.labels" . | nindent 4 }}
 immutable: false
 data:
-  INFERENCE_MODEL: "llama3.1:8b"
+  INFERENCE_MODEL: "gpt-3.5-turbo-0125"
+  INFERENCE_MODEL2: "llama3.1:8b"
   EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
   OLLAMA_URL: "http://envision.home.glroland.com:11434"
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
@@ -29,10 +30,10 @@ data:
     - tool_runtime
     providers:
       inference:
-      - provider_id: ollama
-        provider_type: remote::ollama
-        config:
-          url: ${env.OLLAMA_URL:http://localhost:11434}
+      #- provider_id: ollama
+      #  provider_type: remote::ollama
+      #  config:
+      #    url: ${env.OLLAMA_URL:http://localhost:11434}
       - provider_id: sentence-transformers
         provider_type: inline::sentence-transformers
         config: {}
@@ -129,10 +130,10 @@ data:
       type: sqlite
       db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/meta-reference-gpu}/inference_store.db
     models:
-    - metadata: {}
-      model_id: ${env.INFERENCE_MODEL}
-      provider_id: ollama
-      model_type: llm
+    #- metadata: {}
+    #  model_id: ${env.INFERENCE_MODEL}
+    #  provider_id: ollama
+    #  model_type: llm
     - metadata:
         embedding_dimension: 384
       model_id: all-MiniLM-L6-v2
@@ -140,7 +141,7 @@ data:
       provider_model_id: all-minilm:latest
       model_type: embedding
     - metadata: {}
-      model_id: ${env.OPENAI_INFERENCE_MODEL:gpt-3.5-turbo-0125}
+      model_id: ${env.INFERENCE_MODEL:gpt-3.5-turbo-0125}
       provider_id: openai
       model_type: llm
     shields: []
