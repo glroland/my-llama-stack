@@ -41,6 +41,11 @@ data:
         provider_type: remote::openai
         config:
           api_key: ${env.OPENAI_API_KEY:nokeyneeded}
+      - provider_id: passthrough
+        provider_type: remote::passthrough
+        config:
+          api_key: ${env.LLM_URL:http://localhost/v1}
+          api_key: ${env.LLM_API_KEY:nokeyneeded}
       vector_io:
       - provider_id: faiss
         provider_type: inline::faiss
@@ -143,6 +148,10 @@ data:
     - metadata: {}
       model_id: ${env.INFERENCE_MODEL:gpt-4o-mini}
       provider_id: openai
+      model_type: llm
+    - metadata: {}
+      model_id: ${env.LLM_MODEL:llama3.1}
+      provider_id: passthrough
       model_type: llm
     shields: []
     vector_dbs: []
