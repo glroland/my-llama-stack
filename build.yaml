@@ -8,6 +8,8 @@ distribution_spec:
     - inline::sentence-transformers
     - remote::vllm
     - remote::openai
+    - remote::bedrock
+    - remote::passthrough
     vector_io:
     - inline::faiss
     - remote::milvus
@@ -30,6 +32,7 @@ distribution_spec:
     tool_runtime:
     - remote::tavily-search
     - inline::rag-runtime
+    - inline::code-interpreter
     - remote::model-context-protocol
 image_type: container
 additional_pip_packages:
