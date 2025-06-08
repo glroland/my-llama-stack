@@ -134,12 +134,12 @@ data:
     #  model_id: ${env.INFERENCE_MODEL}
     #  provider_id: ollama
     #  model_type: llm
-    - metadata:
-        embedding_dimension: 384
-      model_id: all-MiniLM-L6-v2
-      provider_id: ollama
-      provider_model_id: all-minilm:latest
-      model_type: embedding
+    #- metadata:
+    #    embedding_dimension: 384
+    #  model_id: all-MiniLM-L6-v2
+    #  provider_id: ollama
+    #  provider_model_id: all-minilm:latest
+    #  model_type: embedding
     - metadata: {}
       model_id: ${env.INFERENCE_MODEL:o4-mini-2025-04-16}
       provider_id: openai
