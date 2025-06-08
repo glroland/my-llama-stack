@@ -6,7 +6,7 @@ metadata:
     {{- include "my-llama-stack.labels" . | nindent 4 }}
 immutable: false
 data:
-  INFERENCE_MODEL: "o4-mini-2025-04-16"
+  INFERENCE_MODEL: "gpt-4o-mini"
   INFERENCE_MODEL2: "llama3.1:8b"
   EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
   OLLAMA_URL: "http://envision.home.glroland.com:11434"
@@ -134,14 +134,14 @@ data:
     #  model_id: ${env.INFERENCE_MODEL}
     #  provider_id: ollama
     #  model_type: llm
-    #- metadata:
-    #    embedding_dimension: 384
-    #  model_id: all-MiniLM-L6-v2
-    #  provider_id: ollama
-    #  provider_model_id: all-minilm:latest
-    #  model_type: embedding
+    - metadata:
+        embedding_dimension: 3072
+      model_id: text-embedding-3-large
+      provider_id: openai
+      provider_model_id: text-embedding-3-large
+      model_type: embedding
     - metadata: {}
-      model_id: ${env.INFERENCE_MODEL:o4-mini-2025-04-16}
+      model_id: ${env.INFERENCE_MODEL:gpt-4o-mini}
       provider_id: openai
       model_type: llm
     shields: []
