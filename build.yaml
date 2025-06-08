@@ -31,8 +31,8 @@ distribution_spec:
     - inline::braintrust
     tool_runtime:
     - remote::tavily-search
+#    - inline::code-interpreter   # KeyError: 'inline::code-interpreter'
     - inline::rag-runtime
-    - inline::code-interpreter
     - remote::model-context-protocol
 image_type: container
 additional_pip_packages:
