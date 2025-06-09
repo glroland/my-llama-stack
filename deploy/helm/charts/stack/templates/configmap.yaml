@@ -46,12 +46,12 @@ data:
         config:
           url: ${env.PASSTHROUGH_URL:http://localhost/v1}
           api_key: ${env.PASSTHROUGH_API_KEY:nokeyneeded}
-      - provider_id: bedrock
-        provider_type: remote::bedrock
-        config:
-          aws_access_key_id: ${env.AWS_ACCESS_KEY_ID:}
-          aws_secret_access_key: ${env.AWS_SECRET_ACCESS_KEY:}
-          region_name: ${env.AWS_DEFAULT_REGION:}
+      #- provider_id: bedrock
+      #  provider_type: remote::bedrock
+      #  config:
+      #    aws_access_key_id: ${env.AWS_ACCESS_KEY_ID:}
+      #    aws_secret_access_key: ${env.AWS_SECRET_ACCESS_KEY:}
+      #    region_name: ${env.AWS_DEFAULT_REGION:}
       vector_io:
       - provider_id: faiss
         provider_type: inline::faiss
