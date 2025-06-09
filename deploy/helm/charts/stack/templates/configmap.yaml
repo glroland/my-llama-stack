@@ -44,8 +44,8 @@ data:
       - provider_id: passthrough
         provider_type: remote::passthrough
         config:
-          api_key: ${env.LLM_URL:http://localhost/v1}
-          api_key: ${env.LLM_API_KEY:nokeyneeded}
+          api_key: ${env.PASSTHROUGH_URL:http://localhost/v1}
+          api_key: ${env.PASSTHROUGH_API_KEY:nokeyneeded}
       vector_io:
       - provider_id: faiss
         provider_type: inline::faiss
@@ -150,8 +150,9 @@ data:
       provider_id: openai
       model_type: llm
     - metadata: {}
-      model_id: ${env.LLM_MODEL:llama3.1}
+      model_id: meta-llama/Llama-3.3-70B-Instruct
       provider_id: passthrough
+      provider_model_id: meta.llama3-3-70b-instruct-v1:0
       model_type: llm
     shields: []
     vector_dbs: []
