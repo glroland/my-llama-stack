@@ -109,6 +109,12 @@ spec:
                   name: app-secrets
                   key: AWS_DEFAULT_REGION
                   optional: true
+            - name: TOGETHER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: TOGETHER_API_KEY
+                  optional: true
           volumeMounts:
             - name: run-override
               mountPath: /app/run.yaml
