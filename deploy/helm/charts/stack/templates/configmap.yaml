@@ -41,17 +41,11 @@ data:
         provider_type: remote::openai
         config:
           api_key: ${env.OPENAI_API_KEY:nokeyneeded}
-      - provider_id: passthrough
-        provider_type: remote::passthrough
+      - provider_id: together
+        provider_type: remote::together
         config:
-          url: ${env.PASSTHROUGH_URL:http://localhost/v1}
-          api_key: ${env.PASSTHROUGH_API_KEY:nokeyneeded}
-      #- provider_id: bedrock
-      #  provider_type: remote::bedrock
-      #  config:
-      #    aws_access_key_id: ${env.AWS_ACCESS_KEY_ID:}
-      #    aws_secret_access_key: ${env.AWS_SECRET_ACCESS_KEY:}
-      #    region_name: ${env.AWS_DEFAULT_REGION:}
+          url: https://api.together.xyz/v1
+          api_key: ${env.TOGETHER_API_KEY:}
       vector_io:
       - provider_id: faiss
         provider_type: inline::faiss
@@ -156,9 +150,138 @@ data:
       provider_id: openai
       model_type: llm
     - metadata: {}
+      model_id: meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
+      provider_id: together
+      provider_model_id: meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.1-8B-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Meta-Llama-3.1-8B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+      provider_id: together
+      provider_model_id: meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.1-70B-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Meta-Llama-3.1-70B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
+      provider_id: together
+      provider_model_id: meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.1-405B-Instruct-FP8
+      provider_id: together
+      provider_model_id: meta-llama/Meta-Llama-3.1-405B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.2-3B-Instruct-Turbo
+      provider_id: together
+      provider_model_id: meta-llama/Llama-3.2-3B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.2-3B-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Llama-3.2-3B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
+      provider_id: together
+      provider_model_id: meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.2-11B-Vision-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Llama-3.2-11B-Vision-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo
+      provider_id: together
+      provider_model_id: meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.2-90B-Vision-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Llama-3.2-90B-Vision-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-3.3-70B-Instruct-Turbo
+      provider_id: together
+      provider_model_id: meta-llama/Llama-3.3-70B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
       model_id: meta-llama/Llama-3.3-70B-Instruct
-      provider_id: passthrough
-      provider_model_id: meta.llama3-3-70b-instruct-v1:0
+      provider_id: together
+      provider_model_id: meta-llama/Llama-3.3-70B-Instruct-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Meta-Llama-Guard-3-8B
+      provider_id: together
+      provider_model_id: meta-llama/Meta-Llama-Guard-3-8B
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-Guard-3-8B
+      provider_id: together
+      provider_model_id: meta-llama/Meta-Llama-Guard-3-8B
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-Guard-3-11B-Vision-Turbo
+      provider_id: together
+      provider_model_id: meta-llama/Llama-Guard-3-11B-Vision-Turbo
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-Guard-3-11B-Vision
+      provider_id: together
+      provider_model_id: meta-llama/Llama-Guard-3-11B-Vision-Turbo
+      model_type: llm
+    - metadata:
+        embedding_dimension: 768
+        context_length: 8192
+      model_id: togethercomputer/m2-bert-80M-8k-retrieval
+      provider_id: together
+      provider_model_id: togethercomputer/m2-bert-80M-8k-retrieval
+      model_type: embedding
+    - metadata:
+        embedding_dimension: 768
+        context_length: 32768
+      model_id: togethercomputer/m2-bert-80M-32k-retrieval
+      provider_id: together
+      provider_model_id: togethercomputer/m2-bert-80M-32k-retrieval
+      model_type: embedding
+    - metadata: {}
+      model_id: meta-llama/Llama-4-Scout-17B-16E-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Llama-4-Scout-17B-16E-Instruct
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-4-Scout-17B-16E-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Llama-4-Scout-17B-16E-Instruct
+      model_type: llm
+    - metadata: {}
+      model_id: together/meta-llama/Llama-4-Scout-17B-16E-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Llama-4-Scout-17B-16E-Instruct
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+      provider_id: together
+      provider_model_id: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+      model_type: llm
+    - metadata: {}
+      model_id: meta-llama/Llama-4-Maverick-17B-128E-Instruct
+      provider_id: together
+      provider_model_id: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+      model_type: llm
+    - metadata: {}
+      model_id: together/meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
+      provider_id: together
+      provider_model_id: meta-llama/Llama-4-Maverick-17B-128E-Instruct-FP8
       model_type: llm
     shields: []
     vector_dbs: []
@@ -170,6 +293,8 @@ data:
       provider_id: tavily-search
     - toolgroup_id: builtin::rag
       provider_id: rag-runtime
+    - toolgroup_id: builtin::code_interpreter
+      provider_id: code-interpreter
     logging: null
     server:
       port: {{ .Values.image.port }}
