@@ -10,6 +10,7 @@ distribution_spec:
     - remote::openai
     - remote::bedrock
     - remote::passthrough
+    - remote::together
     vector_io:
     - inline::faiss
     - remote::milvus
@@ -30,10 +31,12 @@ distribution_spec:
     - inline::llm-as-judge
     - inline::braintrust
     tool_runtime:
+    - remote::brave-search
     - remote::tavily-search
-#    - inline::code-interpreter   # KeyError: 'inline::code-interpreter'
+    - inline::code-interpreter
     - inline::rag-runtime
     - remote::model-context-protocol
+    - remote::wolfram-alpha
 image_type: container
 additional_pip_packages:
 - aiosqlite
