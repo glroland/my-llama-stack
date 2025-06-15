@@ -79,9 +79,11 @@ data:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
         config:
-          service_name: "${env.OTEL_SERVICE_NAME:\u200B}"
-          sinks: ${env.TELEMETRY_SINKS:console,sqlite}
+          service_name: "${env.OTEL_SERVICE_NAME:my-llama-stack}"
+          sinks: ${env.TELEMETRY_SINKS:otel_trace,otel_metric,console,sqlite}
           sqlite_db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/meta-reference-gpu}/trace_store.db
+          otel_trace_endpoint: "http://eclipse.home.glroland.com:4318/v1/traces"
+          otel_metric_endpoint: "http://eclipse.home.glroland.com:4318/v1/metrics"
       eval:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
