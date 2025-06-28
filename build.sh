@@ -1,6 +1,6 @@
 #!/bin/bash
 
-uv venv my-llama-stack --python 3.11
+uv venv my-llama-stack --python 3.12
 source my-llama-stack/bin/activate
 
 uv pip install -r requirements.txt

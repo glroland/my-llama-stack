@@ -1,3 +1,3 @@
-FROM my-llama-stack:0.2.12
+FROM my-llama-stack:0.2.13
 
 ADD my-llama-stack-run.yaml /app/run.yaml
