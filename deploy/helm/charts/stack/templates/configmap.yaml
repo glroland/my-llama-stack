@@ -6,8 +6,6 @@ metadata:
     {{- include "my-llama-stack.labels" . | nindent 4 }}
 immutable: false
 data:
-  INFERENCE_MODEL: "gpt-4o-mini"
-  INFERENCE_MODEL2: "llama3.1:8b"
   EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
   OLLAMA_URL: "http://envision.home.glroland.com:11434"
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
@@ -83,7 +81,8 @@ data:
         provider_type: inline::meta-reference
         config:
           service_name: "${env.OTEL_SERVICE_NAME:my-llama-stack}"
-          sinks: ${env.TELEMETRY_SINKS:otel_trace,otel_metric,console,sqlite}
+          #sinks: ${env.TELEMETRY_SINKS:otel_trace,otel_metric,console,sqlite}
+          sinks: otel_trace,otel_metric,console
           sqlite_db_path: ${env.SQLITE_STORE_DIR:~/.llama/distributions/meta-reference-gpu}/trace_store.db
           otel_trace_endpoint: "http://eclipse.home.glroland.com:4318/v1/traces"
           otel_metric_endpoint: "http://eclipse.home.glroland.com:4318/v1/metrics"
@@ -151,7 +150,7 @@ data:
       provider_model_id: text-embedding-3-large
       model_type: embedding
     - metadata: {}
-      model_id: ${env.INFERENCE_MODEL:gpt-4o-mini}
+      model_id: gpt-4o-mini
       provider_id: openai
       model_type: llm
     - metadata: {}
