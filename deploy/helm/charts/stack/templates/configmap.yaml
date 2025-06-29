@@ -6,6 +6,7 @@ metadata:
     {{- include "my-llama-stack.labels" . | nindent 4 }}
 immutable: false
 data:
+  INFERENCE_MODEL: "gpt-4o-mini"
   EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
   OLLAMA_URL: "http://envision.home.glroland.com:11434"
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
