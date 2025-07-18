@@ -9,7 +9,7 @@ global:
   image:
     repository: registry.home.glroland.com/ai/
 #working old release    tag: 51
-    tag: 53
+    tag: 55
     pullPolicy: IfNotPresent
     usePullSecret: true
 
