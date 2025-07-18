@@ -73,11 +73,11 @@ pipeline
       {
          steps 
          {
-            sh 'docker tag distribution-my-llama-stack:0.2.14 my-llama-stack:$BUILD_NUMBER'
+            sh 'docker tag distribution-my-llama-stack:0.2.15 my-llama-stack:$BUILD_NUMBER'
             sh 'docker save my-llama-stack:$BUILD_NUMBER > my-llama-stack-dockerimage.tar'
             step(followSymlinks: false, artifacts: 'my-llama-stack-dockerimage.tar', $class: 'ArtifactArchiver')
             sh 'docker rmi my-llama-stack:$BUILD_NUMBER'
-            sh 'docker rmi distribution-my-llama-stack:0.2.14'
+            sh 'docker rmi distribution-my-llama-stack:0.2.15'
          }
       }
 
