@@ -12,6 +12,7 @@ data:
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
   MILVUS_TOKEN: "root:Milvus"
   LLAMA_STACK_LOGGING: "all=info"
+  OTEL_EXPORTER_OTLP_ENDPOINT: "http://eclipse.home.glroland.com:4318"
 
   run.yaml: |-
     version: '2'
@@ -84,7 +85,7 @@ data:
           service_name: "${env.OTEL_SERVICE_NAME:=my-llama-stack}"
           sinks: ${env.TELEMETRY_SINKS:=otel_trace,otel_metric,console,sqlite}
           sqlite_db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/trace_store.db
-          otel_exporter_otlp_endpoint: "${env.OTEL_EXPORTER_OTLP_ENDPOINT:=http://eclipse.home.glroland.com:4318}"
+          otel_exporter_otlp_endpoint: "${env.OTEL_EXPORTER_OTLP_ENDPOINT:=}"
       eval:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
