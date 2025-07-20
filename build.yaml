@@ -15,12 +15,16 @@ distribution_spec:
     - inline::faiss
     - remote::milvus
     - remote::pgvector
+    files:
+    - inline::localfs
     safety:
     - inline::llama-guard
     agents:
     - inline::meta-reference
     telemetry:
     - inline::meta-reference
+    post_training:
+    - inline::huggingface
     eval:
     - inline::meta-reference
     datasetio:
@@ -31,9 +35,7 @@ distribution_spec:
     - inline::llm-as-judge
     - inline::braintrust
     tool_runtime:
-    - remote::brave-search
     - remote::tavily-search
-#    - inline::code-interpreter     KeyError: 'inline::code-interpreter'
     - inline::rag-runtime
     - remote::model-context-protocol
     - remote::wolfram-alpha
