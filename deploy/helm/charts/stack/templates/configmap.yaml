@@ -227,7 +227,7 @@ data:
     - metadata: {}
       model_id: meta-llama/Llama-Guard-3-8B
       provider_id: together
-      provider_model_id: meta-llama/Meta-Llama-Guard-3-8B
+      provider_model_id: meta-llama/Llama-Guard-3-8B
       model_type: llm
     - metadata: {}
       model_id: meta-llama/Llama-Guard-3-11B-Vision-Turbo
