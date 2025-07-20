@@ -86,6 +86,7 @@ data:
           sqlite_db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/trace_store.db
           otel_trace_endpoint: "http://eclipse.home.glroland.com:4318/v1/traces"
           otel_metric_endpoint: "http://eclipse.home.glroland.com:4318/v1/metrics"
+          otel_exporter_otlp_endpoint: "http://eclipse.home.glroland.com:4318"
       eval:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
