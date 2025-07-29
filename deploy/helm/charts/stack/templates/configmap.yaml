@@ -310,11 +310,10 @@ data:
     #  provider_id: code-interpreter
     - toolgroup_id: mcp::ansible-mcp
       provider_id: model-context-protocol
-      mcp_endpoint: ${env.URL_ANSIBLE_MCP:=https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com/sse}
+      mcp_endpoint: 'https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com'
     - toolgroup_id: agent-utilities
       provider_id: model-context-protocol
-      mcp_endpoint:
-        url: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/sse
+      mcp_endpoint: "https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/sse"
     logging: null
     server:
       port: {{ .Values.image.port }}
