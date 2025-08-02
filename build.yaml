@@ -11,7 +11,6 @@ distribution_spec:
     - provider_type: remote::bedrock
     - provider_type: remote::passthrough
     - provider_type: remote::together
-    - provider_type: remote::bedrock
     vector_io:
     - provider_type: inline::faiss
     - provider_type: remote::milvus
@@ -41,7 +40,6 @@ distribution_spec:
     - provider_type: remote::model-context-protocol
     - provider_type: remote::wolfram-alpha
 image_type: container
-image_name: my-llama-stack
 additional_pip_packages:
 - aiosqlite
 - sqlalchemy[asyncio]
