@@ -1,4 +1,4 @@
-FROM distribution-my-llama-stack:0.2.16
+FROM distribution-my-llama-stack:0.2.17
 
 ENV LLAMA_STACK_ENDPOINT "http://envision:8321"
 ENV FIREWORKS_API_KEY ""
