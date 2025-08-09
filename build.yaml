@@ -44,3 +44,4 @@ additional_pip_packages:
 - aiosqlite
 - sqlalchemy[asyncio]
 - blobfile
+- asyncpg
