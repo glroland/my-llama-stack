@@ -100,6 +100,7 @@ data:
           checkpoint_format: huggingface
           distributed_backend: null
           device: cpu
+          dpo_output_dir: ~/.llama/distributions/meta-reference-gpu/dpo_output
       eval:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
