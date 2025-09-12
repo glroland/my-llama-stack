@@ -63,14 +63,11 @@ data:
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
             table_name: ${env.POSTGRES_TABLE_NAME:=vectorio_faiss_kvstore}
-      # ERROR    2025-06-21 23:36:18,716 llama_stack.distribution.resolver:394 core: Method openai_list_files_in_vector_store incompatible proto: {'vector_store_id', 'after', 'limit', 'filter', 'before', 'order'} vs. obj: {'vector_store_id'} 
-      # ValueError: Provider `milvus (Api.vector_io)` does not implement the following methods:[('openai_list_files_in_vector_store', 'signature_mismatch')]
-      # 
-      #- provider_id: milvus
-      #  provider_type: remote::milvus
-      #  config:
-      #    uri: ${env.MILVUS_ENDPOINT}
-      #    token: ${env.MILVUS_TOKEN}
+      - provider_id: milvus
+        provider_type: remote::milvus
+        config:
+          uri: ${env.MILVUS_ENDPOINT}
+          token: ${env.MILVUS_TOKEN}
       files:
       - provider_id: meta-reference-files
         provider_type: inline::localfs
