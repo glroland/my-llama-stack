@@ -56,9 +56,12 @@ data:
         provider_type: inline::faiss
         config:
           kvstore:
-            type: sqlite
-            namespace: null
-            db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/my-llama-stack}/faiss_store.db
+            type: postgres
+            host: ${env.POSTGRES_HOST:=localhost}
+            port: ${env.POSTGRES_PORT:=5432}
+            db: ${env.POSTGRES_DB:=llamastack}
+            user: ${env.POSTGRES_USER:=llamastack}
+            password: ${env.POSTGRES_PASSWORD:=llamastack}
       # ERROR    2025-06-21 23:36:18,716 llama_stack.distribution.resolver:394 core: Method openai_list_files_in_vector_store incompatible proto: {'vector_store_id', 'after', 'limit', 'filter', 'before', 'order'} vs. obj: {'vector_store_id'} 
       # ValueError: Provider `milvus (Api.vector_io)` does not implement the following methods:[('openai_list_files_in_vector_store', 'signature_mismatch')]
       # 
@@ -73,8 +76,12 @@ data:
         config:
           storage_dir: ${env.FILES_STORAGE_DIR:=~/.llama/distributions/starter/files}
           metadata_store:
-            type: sqlite
-            db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/starter}/files_metadata.db
+            type: postgres
+            host: ${env.POSTGRES_HOST:=localhost}
+            port: ${env.POSTGRES_PORT:=5432}
+            db: ${env.POSTGRES_DB:=llamastack}
+            user: ${env.POSTGRES_USER:=llamastack}
+            password: ${env.POSTGRES_PASSWORD:=llamastack}
       safety:
       - provider_id: llama-guard
         provider_type: inline::llama-guard
@@ -105,8 +112,7 @@ data:
         provider_type: inline::meta-reference
         config:
           service_name: "${env.OTEL_SERVICE_NAME:=my-llama-stack}"
-          sinks: ${env.TELEMETRY_SINKS:=otel_trace,otel_metric,console,sqlite}
-          sqlite_db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/trace_store.db
+          sinks: ${env.TELEMETRY_SINKS:=otel_trace,otel_metric,console}
           otel_exporter_otlp_endpoint: "${env.OTEL_EXPORTER_OTLP_ENDPOINT:=}"
       post_training:
       - provider_id: torchtune-cpu
@@ -118,24 +124,33 @@ data:
         provider_type: inline::meta-reference
         config:
           kvstore:
-            type: sqlite
-            namespace: null
-            db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/meta_reference_eval.db
+            type: postgres
+            host: ${env.POSTGRES_HOST:=localhost}
+            port: ${env.POSTGRES_PORT:=5432}
+            db: ${env.POSTGRES_DB:=llamastack}
+            user: ${env.POSTGRES_USER:=llamastack}
+            password: ${env.POSTGRES_PASSWORD:=llamastack}
       datasetio:
       - provider_id: huggingface
         provider_type: remote::huggingface
         config:
           kvstore:
-            type: sqlite
-            namespace: null
-            db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/huggingface_datasetio.db
+            type: postgres
+            host: ${env.POSTGRES_HOST:=localhost}
+            port: ${env.POSTGRES_PORT:=5432}
+            db: ${env.POSTGRES_DB:=llamastack}
+            user: ${env.POSTGRES_USER:=llamastack}
+            password: ${env.POSTGRES_PASSWORD:=llamastack}
       - provider_id: localfs
         provider_type: inline::localfs
         config:
           kvstore:
-            type: sqlite
-            namespace: null
-            db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/localfs_datasetio.db
+            type: postgres
+            host: ${env.POSTGRES_HOST:=localhost}
+            port: ${env.POSTGRES_PORT:=5432}
+            db: ${env.POSTGRES_DB:=llamastack}
+            user: ${env.POSTGRES_USER:=llamastack}
+            password: ${env.POSTGRES_PASSWORD:=llamastack}
       scoring:
       - provider_id: basic
         provider_type: inline::basic
@@ -166,7 +181,7 @@ data:
       db: ${env.POSTGRES_DB:=llamastack}
       user: ${env.POSTGRES_USER:=llamastack}
       password: ${env.POSTGRES_PASSWORD:=llamastack}
-      table_name: ${env.POSTGRES_TABLE_NAME:=llamastack_kvstore}
+      table_name: ${env.POSTGRES_TABLE_NAME:=metadata_store}
     inference_store:
       type: postgres
       host: ${env.POSTGRES_HOST:=localhost}
@@ -179,8 +194,12 @@ data:
       provider_type: inline::reference
       config:
         kvstore:
-          type: sqlite
-          db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/starter}/batches.db
+          type: postgres
+          host: ${env.POSTGRES_HOST:=localhost}
+          port: ${env.POSTGRES_PORT:=5432}
+          db: ${env.POSTGRES_DB:=llamastack}
+          user: ${env.POSTGRES_USER:=llamastack}
+          password: ${env.POSTGRES_PASSWORD:=llamastack}
     models:
     #- metadata: {}
     #  model_id: ${env.INFERENCE_MODEL:=null}
