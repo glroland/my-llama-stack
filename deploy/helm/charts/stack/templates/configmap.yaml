@@ -68,6 +68,14 @@ data:
         config:
           uri: ${env.MILVUS_ENDPOINT}
           token: ${env.MILVUS_TOKEN}
+          kvstore:
+            type: postgres
+            host: ${env.POSTGRES_HOST:=localhost}
+            port: ${env.POSTGRES_PORT:=5432}
+            db: ${env.POSTGRES_DB:=llamastack}
+            user: ${env.POSTGRES_USER:=llamastack}
+            password: ${env.POSTGRES_PASSWORD:=llamastack}
+            table_name: ${env.POSTGRES_TABLE_NAME:=vectorio_milvus_kvstore}
       files:
       - provider_id: meta-reference-files
         provider_type: inline::localfs
