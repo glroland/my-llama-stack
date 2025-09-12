@@ -45,8 +45,6 @@ distribution_spec:
     - provider_type: inline::reference
 image_type: container
 additional_pip_packages:
-- aiosqlite
 - sqlalchemy[asyncio]
-- blobfile
 - asyncpg
 - psycopg2-binary
