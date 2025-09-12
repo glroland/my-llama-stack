@@ -75,6 +75,8 @@ data:
         provider_type: inline::llama-guard
         config:
           excluded_categories: []
+      - provider_id: code-scanner
+        provider_type: inline::code-scanner
       agents:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
