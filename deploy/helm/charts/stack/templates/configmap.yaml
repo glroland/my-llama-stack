@@ -13,6 +13,11 @@ data:
   MILVUS_TOKEN: "root:Milvus"
   LLAMA_STACK_LOGGING: "all=info"
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://eclipse.home.glroland.com:4318"
+  POSTGRES_HOST: "db.home.glroland.com"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "llamastack"
+  POSTGRES_USER: "llamastack"
+  POSTGRES_PASSWORD: "llamastack"
 
   run.yaml: |-
     version: '2'
@@ -82,11 +87,19 @@ data:
         provider_type: inline::meta-reference
         config:
           persistence_store:
-            type: sqlite
-            db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/agents_store.db
+            type: postgres
+            host: ${env.POSTGRES_HOST:=localhost}
+            port: ${env.POSTGRES_PORT:=5432}
+            db: ${env.POSTGRES_DB:=llamastack}
+            user: ${env.POSTGRES_USER:=llamastack}
+            password: ${env.POSTGRES_PASSWORD:=llamastack}
           responses_store:
-            type: sqlite
-            db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/responses_store.db
+            type: postgres
+            host: ${env.POSTGRES_HOST:=localhost}
+            port: ${env.POSTGRES_PORT:=5432}
+            db: ${env.POSTGRES_DB:=llamastack}
+            user: ${env.POSTGRES_USER:=llamastack}
+            password: ${env.POSTGRES_PASSWORD:=llamastack}
       telemetry:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
@@ -147,11 +160,20 @@ data:
         provider_type: remote::model-context-protocol
         config: {}
     metadata_store:
-      type: sqlite
-      db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/registry.db
+      type: postgres
+      host: ${env.POSTGRES_HOST:=localhost}
+      port: ${env.POSTGRES_PORT:=5432}
+      db: ${env.POSTGRES_DB:=llamastack}
+      user: ${env.POSTGRES_USER:=llamastack}
+      password: ${env.POSTGRES_PASSWORD:=llamastack}
+      table_name: ${env.POSTGRES_TABLE_NAME:=llamastack_kvstore}
     inference_store:
-      type: sqlite
-      db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/inference_store.db
+      type: postgres
+      host: ${env.POSTGRES_HOST:=localhost}
+      port: ${env.POSTGRES_PORT:=5432}
+      db: ${env.POSTGRES_DB:=llamastack}
+      user: ${env.POSTGRES_USER:=llamastack}
+      password: ${env.POSTGRES_PASSWORD:=llamastack}
     batches:
     - provider_id: reference
       provider_type: inline::reference

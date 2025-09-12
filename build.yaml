@@ -49,3 +49,4 @@ additional_pip_packages:
 - sqlalchemy[asyncio]
 - blobfile
 - asyncpg
+- psycopg2-binary

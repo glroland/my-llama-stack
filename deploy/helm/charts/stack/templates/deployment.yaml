@@ -120,6 +120,31 @@ spec:
                   name: app-secrets
                   key: TOGETHER_API_KEY
                   optional: true
+            - name: POSTGRES_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_PORT
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_PASSWORD
           volumeMounts:
             - name: run-override
               mountPath: /app/run.yaml
