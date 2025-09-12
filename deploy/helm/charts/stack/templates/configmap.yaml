@@ -62,6 +62,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
+            table_name: ${env.POSTGRES_TABLE_NAME:=vectorio_faiss_kvstore}
       # ERROR    2025-06-21 23:36:18,716 llama_stack.distribution.resolver:394 core: Method openai_list_files_in_vector_store incompatible proto: {'vector_store_id', 'after', 'limit', 'filter', 'before', 'order'} vs. obj: {'vector_store_id'} 
       # ValueError: Provider `milvus (Api.vector_io)` does not implement the following methods:[('openai_list_files_in_vector_store', 'signature_mismatch')]
       # 
@@ -82,6 +83,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
+            table_name: ${env.POSTGRES_TABLE_NAME:=openai_files}
       safety:
       - provider_id: llama-guard
         provider_type: inline::llama-guard
@@ -100,6 +102,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
+            table_name: ${env.POSTGRES_TABLE_NAME:=agents_store}
           responses_store:
             type: postgres
             host: ${env.POSTGRES_HOST:=localhost}
@@ -107,6 +110,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
+            table_name: ${env.POSTGRES_TABLE_NAME:=openai_responses}
       telemetry:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
@@ -130,6 +134,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
+            table_name: ${env.POSTGRES_TABLE_NAME:=eval_kvstore}
       datasetio:
       - provider_id: huggingface
         provider_type: remote::huggingface
@@ -141,6 +146,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
+            table_name: ${env.POSTGRES_TABLE_NAME:=datasetio_hf_kvstore}
       - provider_id: localfs
         provider_type: inline::localfs
         config:
@@ -151,6 +157,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
+            table_name: ${env.POSTGRES_TABLE_NAME:=datasetio_localfs_kvstore}
       scoring:
       - provider_id: basic
         provider_type: inline::basic
@@ -189,6 +196,7 @@ data:
       db: ${env.POSTGRES_DB:=llamastack}
       user: ${env.POSTGRES_USER:=llamastack}
       password: ${env.POSTGRES_PASSWORD:=llamastack}
+      table_name: ${env.POSTGRES_TABLE_NAME:=inference_store}
     batches:
     - provider_id: reference
       provider_type: inline::reference
@@ -200,6 +208,7 @@ data:
           db: ${env.POSTGRES_DB:=llamastack}
           user: ${env.POSTGRES_USER:=llamastack}
           password: ${env.POSTGRES_PASSWORD:=llamastack}
+          table_name: ${env.POSTGRES_TABLE_NAME:=batches_kvstore}
     models:
     #- metadata: {}
     #  model_id: ${env.INFERENCE_MODEL:=null}
