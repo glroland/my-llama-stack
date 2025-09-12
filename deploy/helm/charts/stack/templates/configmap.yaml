@@ -62,7 +62,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: ${env.POSTGRES_TABLE_NAME:=vectorio_faiss_kvstore}
+            table_name: vectorio_faiss_kvstore
       - provider_id: milvus
         provider_type: remote::milvus
         config:
@@ -75,7 +75,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: ${env.POSTGRES_TABLE_NAME:=vectorio_milvus_kvstore}
+            table_name: vectorio_milvus_kvstore
       files:
       - provider_id: meta-reference-files
         provider_type: inline::localfs
@@ -88,7 +88,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: ${env.POSTGRES_TABLE_NAME:=openai_files}
+            table_name: openai_files
       safety:
       - provider_id: llama-guard
         provider_type: inline::llama-guard
@@ -107,7 +107,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: ${env.POSTGRES_TABLE_NAME:=agents_store}
+            table_name: agents_store
           responses_store:
             type: postgres
             host: ${env.POSTGRES_HOST:=localhost}
@@ -115,7 +115,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: ${env.POSTGRES_TABLE_NAME:=openai_responses}
+            table_name: openai_responses
       telemetry:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
@@ -139,7 +139,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: ${env.POSTGRES_TABLE_NAME:=eval_kvstore}
+            table_name: eval_kvstore
       datasetio:
       - provider_id: huggingface
         provider_type: remote::huggingface
@@ -151,7 +151,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: ${env.POSTGRES_TABLE_NAME:=datasetio_hf_kvstore}
+            table_name: datasetio_hf_kvstore
       - provider_id: localfs
         provider_type: inline::localfs
         config:
@@ -162,7 +162,7 @@ data:
             db: ${env.POSTGRES_DB:=llamastack}
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: ${env.POSTGRES_TABLE_NAME:=datasetio_localfs_kvstore}
+            table_name: datasetio_localfs_kvstore
       scoring:
       - provider_id: basic
         provider_type: inline::basic
@@ -193,7 +193,7 @@ data:
       db: ${env.POSTGRES_DB:=llamastack}
       user: ${env.POSTGRES_USER:=llamastack}
       password: ${env.POSTGRES_PASSWORD:=llamastack}
-      table_name: ${env.POSTGRES_TABLE_NAME:=metadata_store}
+      table_name: metadata_store
     inference_store:
       type: postgres
       host: ${env.POSTGRES_HOST:=localhost}
@@ -201,7 +201,7 @@ data:
       db: ${env.POSTGRES_DB:=llamastack}
       user: ${env.POSTGRES_USER:=llamastack}
       password: ${env.POSTGRES_PASSWORD:=llamastack}
-      table_name: ${env.POSTGRES_TABLE_NAME:=inference_store}
+      table_name: inference_store
     batches:
     - provider_id: reference
       provider_type: inline::reference
@@ -213,7 +213,7 @@ data:
           db: ${env.POSTGRES_DB:=llamastack}
           user: ${env.POSTGRES_USER:=llamastack}
           password: ${env.POSTGRES_PASSWORD:=llamastack}
-          table_name: ${env.POSTGRES_TABLE_NAME:=batches_kvstore}
+          table_name: batches_kvstore
     models:
     #- metadata: {}
     #  model_id: ${env.INFERENCE_MODEL:=null}
