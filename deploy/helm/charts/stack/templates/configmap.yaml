@@ -225,6 +225,12 @@ data:
       provider_id: openai
       provider_model_id: text-embedding-3-large
       model_type: embedding
+    - metadata:
+        embedding_dimension: 768
+      model_id: granite-embedding-125m
+      provider_id: sentence-transformers
+      provider_model_id: ibm-granite/granite-embedding-125m-english
+      model_type: embedding
     - metadata: {}
       model_id: gpt-4o-mini
       provider_id: openai
