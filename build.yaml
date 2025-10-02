@@ -11,6 +11,9 @@ distribution_spec:
     - provider_type: remote::bedrock
     - provider_type: remote::passthrough
     - provider_type: remote::together
+    - provider_type: remote::anthropic
+    - provider_type: remote::azure
+    - provider_type: remote::vertexai
     vector_io:
     - provider_type: inline::faiss
     - provider_type: remote::milvus
