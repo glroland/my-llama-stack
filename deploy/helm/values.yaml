@@ -8,8 +8,8 @@ global:
 
   image:
     repository: registry.home.glroland.com/ai/
-#working old release    tag: 69
-    tag: 72
+#working old release    tag: 72
+    tag: manual-v0.3.0rc1
     pullPolicy: IfNotPresent
     usePullSecret: true
 

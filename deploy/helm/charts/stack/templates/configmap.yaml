@@ -120,13 +120,13 @@ data:
             user: ${env.POSTGRES_USER:=llamastack}
             password: ${env.POSTGRES_PASSWORD:=llamastack}
             table_name: openai_responses
-      telemetry:
-      - provider_id: meta-reference
-        provider_type: inline::meta-reference
-        config:
-          service_name: "${env.OTEL_SERVICE_NAME:=my-llama-stack}"
-          sinks: ${env.TELEMETRY_SINKS:=otel_trace,otel_metric,console}
-          otel_exporter_otlp_endpoint: "${env.OTEL_EXPORTER_OTLP_ENDPOINT:=}"
+      #telemetry:
+      #- provider_id: meta-reference
+      #  provider_type: inline::meta-reference
+      #  config:
+      #    service_name: "${env.OTEL_SERVICE_NAME:=my-llama-stack}"
+      #    sinks: ${env.TELEMETRY_SINKS:=otel_trace,otel_metric,console}
+      #    otel_exporter_otlp_endpoint: "${env.OTEL_EXPORTER_OTLP_ENDPOINT:=}"
       post_training:
       - provider_id: torchtune-cpu
         provider_type: inline::torchtune-cpu
