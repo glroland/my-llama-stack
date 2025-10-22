@@ -7,7 +7,7 @@ serviceAccount:
 global:
 
   image:
-    repository: docker.io/llamastack
+    repository: docker.io/llamastack/
 #working old release    tag: 72
     tag: 0.3.0
     pullPolicy: IfNotPresent
