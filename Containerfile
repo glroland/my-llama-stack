@@ -7,3 +7,6 @@ ENV RUN_CONFIG_PATH=/app/run.yaml
 ADD my-llama-stack-run.yaml /app/run.yaml
 
 RUN mkdir -p /.llama/distributions
+
+RUN chgrp -R 0 /.llama && \
+    chmod -R g+rwX /.llama
