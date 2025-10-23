@@ -4,7 +4,7 @@ metadata:
   name: {{ include "my-llama-stack.fullname" . }}
 spec:
   accessModes:
-    - ReadWriteOnce
+    - ReadWriteMany
   resources:
     requests:
       storage: 1Gi
