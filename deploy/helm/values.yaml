@@ -7,9 +7,9 @@ serviceAccount:
 global:
 
   image:
-    repository: docker.io/llamastack/
+    repository: registry.home.glroland.com/ai/
 #working old release    tag: 72
-    tag: 0.3.0
+    tag: 83
     pullPolicy: IfNotPresent
     usePullSecret: true
 
