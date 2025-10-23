@@ -74,8 +74,8 @@ data:
         config:
           storage_dir: ${env.FILES_STORAGE_DIR:=~/.llama/distributions/starter/files}
           metadata_store:
-            namespace: files
-            backend: kv_default
+            table_name: files_metadata
+            backend: sql_default
       safety:
       - provider_id: llama-guard
         provider_type: inline::llama-guard
