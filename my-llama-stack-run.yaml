@@ -6,7 +6,6 @@ apis:
 - vector_io
 - safety
 - agents
-- telemetry
 - eval
 - datasetio
 - scoring
@@ -68,14 +67,14 @@ providers:
       responses_store:
         type: sqlite
         db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/responses_store.db
-  telemetry:
-  - provider_id: meta-reference
-    provider_type: inline::meta-reference
-    config:
-      service_name: "${env.OTEL_SERVICE_NAME:=my-llama-stack}"
-      sinks: ${env.TELEMETRY_SINKS:=otel_trace,otel_metric,console,sqlite}
-      sqlite_db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/trace_store.db
-      otel_exporter_otlp_endpoint: "${env.OTEL_EXPORTER_OTLP_ENDPOINT:=}"
+  #telemetry:
+  #- provider_id: meta-reference
+  #  provider_type: inline::meta-reference
+  #  config:
+  #    service_name: "${env.OTEL_SERVICE_NAME:=my-llama-stack}"
+  #    sinks: ${env.TELEMETRY_SINKS:=otel_trace,otel_metric,console,sqlite}
+  #    sqlite_db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/meta-reference-gpu}/trace_store.db
+  #    otel_exporter_otlp_endpoint: "${env.OTEL_EXPORTER_OTLP_ENDPOINT:=}"
   post_training:
   - provider_id: torchtune-cpu
     provider_type: inline::torchtune-cpu
