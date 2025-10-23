@@ -68,6 +68,7 @@ pipeline
       {
          steps 
          {
+            sh "echo docker build --build-arg LLAMA_STACK_TAG=${env.LLAMA_STACK_DISTRO_NAME} -t my-llama-stack:$BUILD_NUMBER -f Containerfile ."
             sh "docker build --build-arg LLAMA_STACK_TAG=${env.LLAMA_STACK_DISTRO_NAME} -t my-llama-stack:$BUILD_NUMBER -f Containerfile ."
             sh "docker rmi llama-stack:${env.LLAMA_STACK_TAG}"
          }
