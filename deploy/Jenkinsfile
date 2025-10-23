@@ -38,7 +38,10 @@ pipeline
                // recreate artifact directory
                deleteDir()
                sh 'pwd -P'
+            }
 
+            dir('target/llama-stack')
+            {
                // checkout the llama stack distro for the configured tag
                checkout scm: [$class: 'GitSCM',
                               userRemoteConfigs: [[url: "https://github.com/llamastack/llama-stack.git"]],
