@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  name: distribution-starter
+  name: my-llama-stack
   port: 8080
 
 nameOverride: ""
