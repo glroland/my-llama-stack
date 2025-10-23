@@ -151,7 +151,7 @@ spec:
               mountPath: /app/run.yaml
               subPath: run.yaml
             - name: llama-storage
-              mountPath: /.llama
+              mountPath: /llama-storage
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           resources:
