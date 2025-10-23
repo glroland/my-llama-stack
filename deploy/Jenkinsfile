@@ -55,7 +55,7 @@ pipeline
             dir('target/llama-stack')
             {
                sh """
-                  docker build . -f containers/Containerfile --build-arg DISTRO_NAME=${env.LLAMA_STACK_DISTRO_NAME}" --tag llama-stack:${env.LLAMA_STACK_DISTRO_NAME} --progress=plain
+                  docker build . -f containers/Containerfile --build-arg DISTRO_NAME=${env.LLAMA_STACK_DISTRO_NAME} --tag llama-stack:${env.LLAMA_STACK_DISTRO_NAME} --progress=plain
                   """
             }
          }
