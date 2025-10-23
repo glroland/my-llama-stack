@@ -22,13 +22,11 @@ data:
   run.yaml: |-
     version: '2'
     image_name: my-llama-stack
-    container_image: my-llama-stack
     apis:
     - inference
     - vector_io
     - safety
     - agents
-    - telemetry
     - eval
     - datasetio
     - scoring
@@ -267,3 +265,50 @@ data:
     logging: null
     server:
       port: {{ .Values.image.port }}
+    storage:
+      backends:
+        kv_default:
+          type: kv_sqlite
+          db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/starter}/kvstore.db
+        sql_default:
+          type: sql_sqlite
+          db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/starter}/sql_store.db
+      stores:
+        metadata:
+          namespace: registry
+          backend: kv_default
+        inference:
+          table_name: inference_store
+          backend: sql_default
+          max_write_queue_size: 10000
+          num_writers: 4
+        conversations:
+          table_name: openai_conversations
+          backend: sql_default
+    registered_resources:
+      models: []
+      shields:
+      - shield_id: llama-guard
+        provider_id: ${env.SAFETY_MODEL:+llama-guard}
+        provider_shield_id: ${env.SAFETY_MODEL:=}
+      - shield_id: code-scanner
+        provider_id: ${env.CODE_SCANNER_MODEL:+code-scanner}
+        provider_shield_id: ${env.CODE_SCANNER_MODEL:=}
+      vector_dbs: []
+      datasets: []
+      scoring_fns: []
+      benchmarks: []
+      tool_groups:
+      - toolgroup_id: builtin::websearch
+        provider_id: tavily-search
+      - toolgroup_id: builtin::rag
+        provider_id: rag-runtime
+    server:
+      port: 8321
+    telemetry:
+      enabled: true
+    vector_stores:
+      default_provider_id: faiss
+      default_embedding_model:
+        provider_id: sentence-transformers
+        model_id: nomic-ai/nomic-embed-text-v1.5
