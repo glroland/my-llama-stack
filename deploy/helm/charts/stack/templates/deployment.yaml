@@ -38,7 +38,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.global.image.repository }}{{ .Values.image.name }}:{{ .Values.global.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["llama", "stack", "run", "--enable-ui", "/app/run.yaml"]
+          command: ["llama", "stack", "run", "/app/run.yaml"]
           ports:
           - containerPort: {{ .Values.image.port }}
           env:
