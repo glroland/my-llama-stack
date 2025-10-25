@@ -175,7 +175,7 @@ spec:
             optional: true
         - name: llama-storage
           persistentVolumeClaim:
-            claimName: {{ include "my-llama-stack.fullname" . }}
+            claimName: {{ include "my-llama-stack.fullname" . }}-pvc
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
