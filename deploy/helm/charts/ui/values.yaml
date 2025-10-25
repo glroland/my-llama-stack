@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  name: my-llama-stack
+  name: my-llama-stack-ui
   port: 8080
 
 nameOverride: ""
