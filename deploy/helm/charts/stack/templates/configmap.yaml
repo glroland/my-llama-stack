@@ -13,6 +13,7 @@ data:
   MILVUS_TOKEN: "root:Milvus"
   LLAMA_STACK_LOGGING: "all=info"
   OTEL_EXPORTER_OTLP_ENDPOINT: "http://eclipse.home.glroland.com:4318"
+  OTEL_SERVICE_NAME: "my-llama-stack"
   POSTGRES_HOST: "db.home.glroland.com"
   POSTGRES_PORT: "5432"
   POSTGRES_DB: "llamastack"
