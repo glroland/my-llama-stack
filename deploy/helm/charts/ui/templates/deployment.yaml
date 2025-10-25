@@ -38,40 +38,134 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.global.image.repository }}{{ .Values.image.name }}:{{ .Values.global.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["llama", "stack", "run", "--enable-ui", "/app/run.yaml"]
           ports:
           - containerPort: {{ .Values.image.port }}
           env:
-            - name: LLAMA_STACK_ENDPOINT
-              value: "http://{{ .Release.Name }}:{{ .Values.image.port }}"
-            - name: FIREWORKS_API_KEY
+          env:
+            - name: LLAMA_STACK_PORT
+              value: "{{ .Values.image.port }}"
+            - name: LLAMA_STACK_LOGGING
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "my-llama-stack.fullname" . }}
-                  key: FIREWORKS_API_KEY
-            - name: TOGETHER_API_KEY
+                  key: LLAMA_STACK_LOGGING
+            - name: OTEL_EXPORTER_OTLP_ENDPOINT
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "my-llama-stack.fullname" . }}
-                  key: TOGETHER_API_KEY
-            - name: SAMBANOVA_API_KEY
+                  key: OTEL_EXPORTER_OTLP_ENDPOINT
+            - name: INFERENCE_MODEL
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "my-llama-stack.fullname" . }}
-                  key: SAMBANOVA_API_KEY
+                  key: INFERENCE_MODEL
+            - name: EMBEDDING_MODEL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: EMBEDDING_MODEL
+            - name: OLLAMA_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: OLLAMA_URL
+            - name: MILVUS_ENDPOINT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: MILVUS_ENDPOINT
+            - name: MILVUS_TOKEN
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: MILVUS_TOKEN
             - name: OPENAI_API_KEY
               valueFrom:
-                configMapKeyRef:
-                  name: {{ include "my-llama-stack.fullname" . }}
+                secretKeyRef:
+                  name: app-secrets
                   key: OPENAI_API_KEY
-            - name: TAVILY_SEARCH_API_KEY
+                  optional: true
+            - name: PASSTHROUGH_URL
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: PASSTHROUGH_URL
+                  optional: true
+            - name: PASSTHROUGH_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: PASSTHROUGH_API_KEY
+                  optional: true
+            - name: AWS_ACCESS_KEY_ID
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AWS_ACCESS_KEY_ID
+                  optional: true
+            - name: AWS_SECRET_ACCESS_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AWS_SECRET_ACCESS_KEY
+                  optional: true
+            - name: AWS_DEFAULT_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: AWS_DEFAULT_REGION
+                  optional: true
+            - name: TOGETHER_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: TOGETHER_API_KEY
+                  optional: true
+            - name: POSTGRES_HOST
               valueFrom:
                 configMapKeyRef:
                   name: {{ include "my-llama-stack.fullname" . }}
-                  key: TAVILY_SEARCH_API_KEY
+                  key: POSTGRES_HOST
+            - name: POSTGRES_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_PORT
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_DB
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_USER
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: POSTGRES_PASSWORD
+          volumeMounts:
+            - name: run-override
+              mountPath: /app/run.yaml
+              subPath: run.yaml
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        - name: run-override
+          configMap:
+            name: {{ include "my-llama-stack.fullname" . }}
+            items:
+              - key: run.yaml
+                path: run.yaml
+        - name: app-secrets
+          secret:
+            secretName: app-secrets
+            optional: true
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

@@ -1,12 +1,27 @@
+# Typically, which LLama Stack distro this image is generated from
 ARG LLAMA_STACK_TAG=my-llama-stack
 
 FROM llama-stack:${LLAMA_STACK_TAG}
 
+# Setup run configuration
 ENV RUN_CONFIG_PATH=/app/run.yaml
 
 ADD my-llama-stack-run.yaml /app/run.yaml
 
+# Prep working directories in file system
 RUN mkdir -p /.llama/distributions
 
 RUN chgrp -R 0 /.llama && \
     chmod -R g+rwX /.llama
+
+#
+# for UI, enable node
+#
+
+# Debian based install of node
+RUN apt-get install -y nodejs
+
+# RHEL based install of node
+#RUN dnf module enable -y nodejs:18 && \
+#    dnf install -y nodejs npm && \
+#    dnf clean all
