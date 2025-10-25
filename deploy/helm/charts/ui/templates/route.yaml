@@ -3,6 +3,7 @@ kind: Route
 metadata:
   annotations:
     app.openshift.io/connects-to: '[{"apiVersion":"apps/v1","kind":"Deployment","name":"my-llama-stack"}]'
+    haproxy.router.openshift.io/timeout: 1800s
   labels:
     app: svc
     app.kubernetes.io/component: my-llama-stack
