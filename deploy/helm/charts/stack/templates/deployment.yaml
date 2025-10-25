@@ -121,6 +121,12 @@ spec:
                   name: app-secrets
                   key: TOGETHER_API_KEY
                   optional: true
+            - name: ANTHROPIC_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: app-secrets
+                  key: ANTHROPIC_API_KEY
+                  optional: true
             - name: POSTGRES_HOST
               valueFrom:
                 configMapKeyRef:

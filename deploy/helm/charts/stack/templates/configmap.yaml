@@ -18,6 +18,7 @@ data:
   POSTGRES_DB: "llamastack"
   POSTGRES_USER: "llamastack"
   POSTGRES_PASSWORD: "llamastack"
+  FILES_STORAGE_DIR: "/llama-storage/files"
 
   run.yaml: |-
     version: '2'
@@ -45,15 +46,15 @@ data:
         provider_type: remote::openai
         config:
           api_key: ${env.OPENAI_API_KEY:=nokeyneeded}
+      - provider_id: anthropic
+        provider_type: remote::anthropic
+        config:
+          api_key: ${env.ANTHROPIC_API_KEY:=nokeyneeded}
       - provider_id: together
         provider_type: remote::together
         config:
           url: https://api.together.xyz/v1
           api_key: ${env.TOGETHER_API_KEY:=null}
-      #- provider_id: anthropic
-      #  provider_type: remote::anthropic
-      #  config:
-      #    api_key: ${env.ANTHROPIC_API_KEY:=}
       vector_io:
       - provider_id: faiss
         provider_type: inline::faiss
@@ -165,11 +166,20 @@ data:
     storage:
       backends:
         kv_default:
-          type: kv_sqlite
-          db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/starter}/kvstore.db
+          type: kv_postgres
+          host: ${env.POSTGRES_HOST:=localhost}
+          port: ${env.POSTGRES_PORT:=5432}
+          db: ${env.POSTGRES_DB:=llamastack}
+          user: ${env.POSTGRES_USER:=llamastack}
+          password: ${env.POSTGRES_PASSWORD:=llamastack}
+          table_name: vectorio_faiss_kvstore
         sql_default:
-          type: sql_sqlite
-          db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/starter}/sql_store.db
+          type: sql_postgres
+          host: ${env.POSTGRES_HOST:=localhost}
+          port: ${env.POSTGRES_PORT:=5432}
+          db: ${env.POSTGRES_DB:=llamastack}
+          user: ${env.POSTGRES_USER:=llamastack}
+          password: ${env.POSTGRES_PASSWORD:=llamastack}
       stores:
         metadata:
           namespace: registry
