@@ -38,6 +38,7 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.global.image.repository }}{{ .Values.image.name }}:{{ .Values.global.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["llama", "stack", "run", "/app/run.yaml"]
           ports:
           - containerPort: {{ .Values.image.port }}
           env:
@@ -149,6 +150,8 @@ spec:
             - name: run-override
               mountPath: /app/run.yaml
               subPath: run.yaml
+            - name: llama-storage
+              mountPath: /llama-storage
           terminationMessagePath: /dev/termination-log
           terminationMessagePolicy: File
           resources:
@@ -164,6 +167,9 @@ spec:
           secret:
             secretName: app-secrets
             optional: true
+        - name: llama-storage
+          persistentVolumeClaim:
+            claimName: {{ include "my-llama-stack.fullname" . }}
       {{- with .Values.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}

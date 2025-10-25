@@ -1,3 +1,0 @@
-FROM distribution-my-llama-stack:dev
-
-ADD my-llama-stack-run.yaml /app/run.yaml

@@ -22,13 +22,11 @@ data:
   run.yaml: |-
     version: '2'
     image_name: my-llama-stack
-    container_image: my-llama-stack
     apis:
     - inference
     - vector_io
     - safety
     - agents
-    - telemetry
     - eval
     - datasetio
     - scoring
@@ -60,40 +58,25 @@ data:
       - provider_id: faiss
         provider_type: inline::faiss
         config:
-          kvstore:
-            type: postgres
-            host: ${env.POSTGRES_HOST:=localhost}
-            port: ${env.POSTGRES_PORT:=5432}
-            db: ${env.POSTGRES_DB:=llamastack}
-            user: ${env.POSTGRES_USER:=llamastack}
-            password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: vectorio_faiss_kvstore
+          persistence:
+            namespace: vector_io::faiss
+            backend: kv_default
       - provider_id: milvus
         provider_type: remote::milvus
         config:
           uri: ${env.MILVUS_ENDPOINT}
           token: ${env.MILVUS_TOKEN}
-          kvstore:
-            type: postgres
-            host: ${env.POSTGRES_HOST:=localhost}
-            port: ${env.POSTGRES_PORT:=5432}
-            db: ${env.POSTGRES_DB:=llamastack}
-            user: ${env.POSTGRES_USER:=llamastack}
-            password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: vectorio_milvus_kvstore
+          persistence:
+            namespace: vector_io::milvus
+            backend: kv_default
       files:
       - provider_id: meta-reference-files
         provider_type: inline::localfs
         config:
           storage_dir: ${env.FILES_STORAGE_DIR:=~/.llama/distributions/starter/files}
           metadata_store:
-            type: postgres
-            host: ${env.POSTGRES_HOST:=localhost}
-            port: ${env.POSTGRES_PORT:=5432}
-            db: ${env.POSTGRES_DB:=llamastack}
-            user: ${env.POSTGRES_USER:=llamastack}
-            password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: openai_files
+            table_name: files_metadata
+            backend: sql_default
       safety:
       - provider_id: llama-guard
         provider_type: inline::llama-guard
@@ -105,22 +88,15 @@ data:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
         config:
-          persistence_store:
-            type: postgres
-            host: ${env.POSTGRES_HOST:=localhost}
-            port: ${env.POSTGRES_PORT:=5432}
-            db: ${env.POSTGRES_DB:=llamastack}
-            user: ${env.POSTGRES_USER:=llamastack}
-            password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: agents_store
-          responses_store:
-            type: postgres
-            host: ${env.POSTGRES_HOST:=localhost}
-            port: ${env.POSTGRES_PORT:=5432}
-            db: ${env.POSTGRES_DB:=llamastack}
-            user: ${env.POSTGRES_USER:=llamastack}
-            password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: openai_responses
+          persistence:
+            agent_state:
+              namespace: agents
+              backend: kv_default
+            responses:
+              table_name: responses
+              backend: sql_default
+              max_write_queue_size: 10000
+              num_writers: 4
       #telemetry:
       #- provider_id: meta-reference
       #  provider_type: inline::meta-reference
@@ -138,36 +114,21 @@ data:
         provider_type: inline::meta-reference
         config:
           kvstore:
-            type: postgres
-            host: ${env.POSTGRES_HOST:=localhost}
-            port: ${env.POSTGRES_PORT:=5432}
-            db: ${env.POSTGRES_DB:=llamastack}
-            user: ${env.POSTGRES_USER:=llamastack}
-            password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: eval_kvstore
+            namespace: eval
+            backend: kv_default
       datasetio:
       - provider_id: huggingface
         provider_type: remote::huggingface
         config:
           kvstore:
-            type: postgres
-            host: ${env.POSTGRES_HOST:=localhost}
-            port: ${env.POSTGRES_PORT:=5432}
-            db: ${env.POSTGRES_DB:=llamastack}
-            user: ${env.POSTGRES_USER:=llamastack}
-            password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: datasetio_hf_kvstore
+            namespace: datasetio::huggingface
+            backend: kv_default
       - provider_id: localfs
         provider_type: inline::localfs
         config:
           kvstore:
-            type: postgres
-            host: ${env.POSTGRES_HOST:=localhost}
-            port: ${env.POSTGRES_PORT:=5432}
-            db: ${env.POSTGRES_DB:=llamastack}
-            user: ${env.POSTGRES_USER:=llamastack}
-            password: ${env.POSTGRES_PASSWORD:=llamastack}
-            table_name: datasetio_localfs_kvstore
+            namespace: datasetio::localfs
+            backend: kv_default
       scoring:
       - provider_id: basic
         provider_type: inline::basic
@@ -191,80 +152,89 @@ data:
       - provider_id: model-context-protocol
         provider_type: remote::model-context-protocol
         config: {}
-    metadata_store:
-      type: postgres
-      host: ${env.POSTGRES_HOST:=localhost}
-      port: ${env.POSTGRES_PORT:=5432}
-      db: ${env.POSTGRES_DB:=llamastack}
-      user: ${env.POSTGRES_USER:=llamastack}
-      password: ${env.POSTGRES_PASSWORD:=llamastack}
-      table_name: metadata_store
-    inference_store:
-      type: postgres
-      host: ${env.POSTGRES_HOST:=localhost}
-      port: ${env.POSTGRES_PORT:=5432}
-      db: ${env.POSTGRES_DB:=llamastack}
-      user: ${env.POSTGRES_USER:=llamastack}
-      password: ${env.POSTGRES_PASSWORD:=llamastack}
-      table_name: inference_store
     batches:
     - provider_id: reference
       provider_type: inline::reference
       config:
         kvstore:
-          type: postgres
-          host: ${env.POSTGRES_HOST:=localhost}
-          port: ${env.POSTGRES_PORT:=5432}
-          db: ${env.POSTGRES_DB:=llamastack}
-          user: ${env.POSTGRES_USER:=llamastack}
-          password: ${env.POSTGRES_PASSWORD:=llamastack}
-          table_name: batches_kvstore
-    models:
-    #- metadata: {}
-    #  model_id: ${env.INFERENCE_MODEL:=null}
-    #  provider_id: ollama
-    #  model_type: llm
-    - metadata:
-        embedding_dimension: 3072
-      model_id: text-embedding-3-large
-      provider_id: openai
-      provider_model_id: text-embedding-3-large
-      model_type: embedding
-    - metadata:
-        embedding_dimension: 768
-      model_id: granite-embedding-125m
-      provider_id: sentence-transformers
-      provider_model_id: ibm-granite/granite-embedding-125m-english
-      model_type: embedding
-    shields: []
-    vector_dbs: []
-    datasets: []
-    scoring_fns: []
-    benchmarks: []
-    tool_groups:
-    - toolgroup_id: builtin::websearch
-      provider_id: tavily-search
-    - toolgroup_id: builtin::rag
-      provider_id: rag-runtime
-    #- toolgroup_id: builtin::code_interpreter
-    #  provider_id: code-interpreter
-
-    - toolgroup_id: mcp::ansible-mcp
-      provider_id: model-context-protocol
-      mcp_endpoint: {uri: https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com/sse}
-
-    - toolgroup_id: mcp::agent-utilities
-      provider_id: model-context-protocol
-      mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/sse}
-
-    - toolgroup_id: mcp::agent-game
-      provider_id: model-context-protocol
-      mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/sse}
-
-    - toolgroup_id: mcp::agent-team
-      provider_id: model-context-protocol
-      mcp_endpoint: {uri: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/sse}
-
+          namespace: batches
+          backend: kv_default
     logging: null
     server:
       port: {{ .Values.image.port }}
+    storage:
+      backends:
+        kv_default:
+          type: kv_sqlite
+          db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/starter}/kvstore.db
+        sql_default:
+          type: sql_sqlite
+          db_path: ${env.SQLITE_STORE_DIR:=~/.llama/distributions/starter}/sql_store.db
+      stores:
+        metadata:
+          namespace: registry
+          backend: kv_default
+        inference:
+          table_name: inference_store
+          backend: sql_default
+          max_write_queue_size: 10000
+          num_writers: 4
+        conversations:
+          table_name: openai_conversations
+          backend: sql_default
+    registered_resources:
+      models:
+      - metadata:
+          embedding_dimension: 3072
+        model_id: text-embedding-3-large
+        provider_id: openai
+        provider_model_id: text-embedding-3-large
+        model_type: embedding
+      - metadata:
+          embedding_dimension: 768
+        model_id: granite-embedding-125m
+        provider_id: sentence-transformers
+        provider_model_id: ibm-granite/granite-embedding-125m-english
+        model_type: embedding
+      shields:
+      - shield_id: llama-guard
+        provider_id: ${env.SAFETY_MODEL:+llama-guard}
+        provider_shield_id: ${env.SAFETY_MODEL:=}
+      - shield_id: code-scanner
+        provider_id: ${env.CODE_SCANNER_MODEL:+code-scanner}
+        provider_shield_id: ${env.CODE_SCANNER_MODEL:=}
+      vector_dbs: []
+      datasets: []
+      scoring_fns: []
+      benchmarks: []
+      tool_groups:
+      - toolgroup_id: builtin::websearch
+        provider_id: tavily-search
+      - toolgroup_id: builtin::rag
+        provider_id: rag-runtime
+
+      - toolgroup_id: mcp::ansible-mcp
+        provider_id: model-context-protocol
+        mcp_endpoint: {uri: https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com/sse}
+
+      - toolgroup_id: mcp::agent-utilities
+        provider_id: model-context-protocol
+        mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+
+      - toolgroup_id: mcp::agent-game
+        provider_id: model-context-protocol
+        mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+
+      - toolgroup_id: mcp::agent-team
+        provider_id: model-context-protocol
+        mcp_endpoint: {uri: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+
+    server:
+      port: 8321
+    telemetry:
+      enabled: true
+    vector_stores:
+      default_provider_id: faiss
+      default_embedding_model:
+        provider_id: sentence-transformers
+        model_id: nomic-ai/nomic-embed-text-v1.5
