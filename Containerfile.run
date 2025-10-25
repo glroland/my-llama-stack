@@ -6,7 +6,7 @@ FROM llama-stack:${LLAMA_STACK_TAG}
 # Setup run configuration
 ENV RUN_CONFIG_PATH=/app/run.yaml
 
-ADD my-llama-stack-run.yaml /app/run.yaml
+ADD run.yaml /app/run.yaml
 
 # Prep working directories in file system
 RUN mkdir -p /.llama/distributions
