@@ -33,6 +33,7 @@ data:
     - datasetio
     - scoring
     - tool_runtime
+    - files
     providers:
       inference:
       #- provider_id: ollama
