@@ -172,7 +172,7 @@ data:
           db: ${env.POSTGRES_DB:=llamastack}
           user: ${env.POSTGRES_USER:=llamastack}
           password: ${env.POSTGRES_PASSWORD:=llamastack}
-          table_name: vectorio_faiss_kvstore
+          table_name: kv_default
         sql_default:
           type: sql_postgres
           host: ${env.POSTGRES_HOST:=localhost}
