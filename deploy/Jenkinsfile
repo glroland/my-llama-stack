@@ -58,7 +58,7 @@ pipeline
             dir('target/llama-stack')
             {
                sh """
-                  docker build . -f containers/Containerfile --build-arg DISTRO_NAME=${env.LLAMA_STACK_DISTRO_NAME} --tag llama-stack:${env.LLAMA_STACK_DISTRO_NAME} --progress=plain
+                  docker build --no-cache . -f containers/Containerfile --build-arg DISTRO_NAME=${env.LLAMA_STACK_DISTRO_NAME} --tag llama-stack:${env.LLAMA_STACK_DISTRO_NAME} --progress=plain
                   """
             }
          }
@@ -68,7 +68,7 @@ pipeline
       {
          steps 
          {
-            sh "docker build --build-arg LLAMA_STACK_TAG=${env.LLAMA_STACK_DISTRO_NAME} -t my-llama-stack:$BUILD_NUMBER -f Containerfile.run ."
+            sh "docker build --no-cache --build-arg LLAMA_STACK_TAG=${env.LLAMA_STACK_DISTRO_NAME} -t my-llama-stack:$BUILD_NUMBER -f Containerfile.run ."
          }
       }
 
@@ -86,7 +86,7 @@ pipeline
       {
          steps 
          {
-            sh "docker build --build-arg LLAMA_STACK_TAG=${env.LLAMA_STACK_DISTRO_NAME} -t my-llama-stack-ui:$BUILD_NUMBER -f Containerfile.ui ."
+            sh "docker build --no-cache --build-arg LLAMA_STACK_TAG=${env.LLAMA_STACK_DISTRO_NAME} -t my-llama-stack-ui:$BUILD_NUMBER -f Containerfile.ui ."
             sh "echo docker rmi llama-stack:${env.LLAMA_STACK_TAG}"
          }
       }
