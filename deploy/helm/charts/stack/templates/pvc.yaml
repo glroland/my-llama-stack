@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "my-llama-stack.fullname" . }}
+  name: {{ include "my-llama-stack.fullname" . }}-pvc
 spec:
   accessModes:
     - ReadWriteMany
@@ -9,3 +9,4 @@ spec:
     requests:
       storage: 20Gi
   volumeMode: Filesystem
+  storageClassName: {{ include "my-llama-stack.fullname" . }}-pv-storage-class
