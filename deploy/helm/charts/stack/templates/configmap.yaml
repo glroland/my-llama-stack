@@ -74,7 +74,7 @@ data:
       - provider_id: milvus-local
         provider_type: inline::milvus
         config:
-          db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus/milvus.db}
+          db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus.db}
           persistence:
             namespace: vector_io::milvus-local
             backend: kv_default
