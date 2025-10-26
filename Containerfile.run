@@ -15,7 +15,9 @@ RUN chgrp -R 0 /.llama && \
     chmod -R g+rwX /.llama
 
 # Store cache in llama storage dir
-RUN ln -s /llama-storage /.cache
+RUN rm -rf /.cache && \
+    mkdir -p /llama-storage && \
+    ln -s /llama-storage /.cache
 
 # Download Hugging Face Models
 #RUN hf download sentence-transformers/all-mpnet-base-v2 --exclude onnx --exclude openvino
