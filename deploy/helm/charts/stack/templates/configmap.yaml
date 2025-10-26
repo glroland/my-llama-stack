@@ -63,13 +63,20 @@ data:
           persistence:
             namespace: vector_io::faiss
             backend: kv_default
-      - provider_id: milvus
+      - provider_id: milvus-remove
         provider_type: remote::milvus
         config:
           uri: ${env.MILVUS_ENDPOINT}
           token: ${env.MILVUS_TOKEN}
           persistence:
-            namespace: vector_io::milvus
+            namespace: vector_io::milvus-remote
+            backend: kv_default
+      - provider_id: milvus-local
+        provider_type: inline::milvus
+        config:
+          db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus/milvus.db}
+          persistence:
+            namespace: vector_io::milvus-local
             backend: kv_default
       files:
       - provider_id: meta-reference-files
