@@ -34,6 +34,7 @@ data:
     - scoring
     - tool_runtime
     - files
+    - batches
     providers:
       inference:
       #- provider_id: ollama
@@ -154,13 +155,13 @@ data:
       - provider_id: model-context-protocol
         provider_type: remote::model-context-protocol
         config: {}
-    batches:
-    - provider_id: reference
-      provider_type: inline::reference
-      config:
-        kvstore:
-          namespace: batches
-          backend: kv_default
+      batches:
+      - provider_id: reference
+        provider_type: inline::reference
+        config:
+          kvstore:
+            namespace: batches
+            backend: kv_default
     logging: null
     server:
       port: {{ .Values.image.port }}
