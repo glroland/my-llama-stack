@@ -4,19 +4,16 @@ metadata:
   name: my-llama-stack
 spec:
   destination:
-    name: ''
+    name: in-cluster
     namespace: my-llama-stack
-    server: 'https://kubernetes.default.svc'
+    server: https://kubernetes.default.svc
   source:
     path: deploy/helm
-    repoURL: 'https://github.com/glroland/my-llama-stack.git'
+    repoURL: https://github.com/glroland/my-llama-stack.git
     targetRevision: HEAD
     helm:
       valueFiles:
         - values.yaml
   sources: []
   project: default
-  syncPolicy:
-    automated:
-      prune: true
 
