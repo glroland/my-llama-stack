@@ -16,7 +16,8 @@ data:
   OTEL_SERVICE_NAME: "my-llama-stack"
   POSTGRES_HOST: "db.home.glroland.com"
   POSTGRES_PORT: "5432"
-  POSTGRES_DB: "llamastack"
+  POSTGRES_DB_SQL: "llamastack_sql"
+  POSTGRES_DB_KV: "llamastack_kv"
   POSTGRES_USER: "llamastack"
   POSTGRES_PASSWORD: "llamastack"
   FILES_STORAGE_DIR: "/llama-storage/files"
@@ -171,7 +172,7 @@ data:
           type: kv_postgres
           host: ${env.POSTGRES_HOST:=localhost}
           port: ${env.POSTGRES_PORT:=5432}
-          db: ${env.POSTGRES_DB:=llamastack}
+          db: ${env.POSTGRES_DB_KV:=llamastack_kv}
           user: ${env.POSTGRES_USER:=llamastack}
           password: ${env.POSTGRES_PASSWORD:=llamastack}
           table_name: kv_default
@@ -179,7 +180,7 @@ data:
           type: sql_postgres
           host: ${env.POSTGRES_HOST:=localhost}
           port: ${env.POSTGRES_PORT:=5432}
-          db: ${env.POSTGRES_DB:=llamastack}
+          db: ${env.POSTGRES_DB_SQL:=llamastack_sql}
           user: ${env.POSTGRES_USER:=llamastack}
           password: ${env.POSTGRES_PASSWORD:=llamastack}
       stores:
