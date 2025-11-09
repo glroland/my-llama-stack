@@ -269,4 +269,4 @@ data:
       default_provider_id: milvus
       default_embedding_model:
         provider_id: sentence-transformers
-        model_id: all-mpnet-base-v2
+        model_id: sentence-transformers/all-mpnet-base-v2
