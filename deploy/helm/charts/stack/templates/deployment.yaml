@@ -49,6 +49,11 @@ spec:
                 configMapKeyRef:
                   name: {{ include "my-llama-stack.fullname" . }}
                   key: LLAMA_STACK_LOGGING
+            - name: OTEL_SERVICE_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: {{ include "my-llama-stack.fullname" . }}
+                  key: OTEL_SERVICE_NAME
             - name: OTEL_EXPORTER_OTLP_ENDPOINT
               valueFrom:
                 configMapKeyRef:
