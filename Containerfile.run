@@ -5,8 +5,11 @@ FROM llama-stack:${LLAMA_STACK_TAG}
 
 # Setup run configuration
 ENV RUN_CONFIG_PATH=/app/run.yaml
-
 ADD run.yaml /app/run.yaml
+
+# Add database configuration variables (separated into 2 databases)
+ENV POSTGRES_DB_SQL "llamastack_sql"
+ENV POSTGRES_DB_KV "llamastack_kv"
 
 # Prep working directories in file system
 RUN mkdir -p /.llama/distributions
@@ -20,9 +23,9 @@ RUN rm -rf /.cache && \
     ln -s /llama-storage /.cache
 
 # Download Hugging Face Models
-#RUN hf download sentence-transformers/all-mpnet-base-v2 --exclude "onnx/*" "openvino/*"
-#RUN hf download nomic-ai/nomic-embed-text-v1.5 --exclude "onnx/*"
-#RUN hf download ibm-granite/granite-embedding-125m-english
+RUN hf download sentence-transformers/all-mpnet-base-v2 --exclude "onnx/*" "openvino/*"
+RUN hf download nomic-ai/nomic-embed-text-v1.5 --exclude "onnx/*"
+RUN hf download ibm-granite/granite-embedding-125m-english
 
 #
 # for UI, enable node

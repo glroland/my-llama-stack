@@ -16,7 +16,8 @@ data:
   OTEL_SERVICE_NAME: "my-llama-stack"
   POSTGRES_HOST: "db.home.glroland.com"
   POSTGRES_PORT: "5432"
-  POSTGRES_DB: "llamastack"
+  POSTGRES_DB_SQL: "llamastack_sql"
+  POSTGRES_DB_KV: "llamastack_kv"
   POSTGRES_USER: "llamastack"
   POSTGRES_PASSWORD: "llamastack"
   FILES_STORAGE_DIR: "/llama-storage/files"
@@ -58,24 +59,24 @@ data:
           url: https://api.together.xyz/v1
           api_key: ${env.TOGETHER_API_KEY:=null}
       vector_io:
-      - provider_id: faiss
-        provider_type: inline::faiss
-        config:
-          persistence:
-            namespace: vector_io::faiss
-            backend: kv_default
-      - provider_id: milvus-remote
-        provider_type: remote::milvus
-        config:
-          uri: ${env.MILVUS_ENDPOINT}
-          token: ${env.MILVUS_TOKEN}
-          persistence:
-            namespace: vector_io::milvus-remote
-            backend: kv_default
-      - provider_id: milvus-local
+      #- provider_id: faiss
+      #  provider_type: inline::faiss
+      #  config:
+      #    persistence:
+      #      namespace: vector_io::faiss
+      #      backend: kv_default
+      #- provider_id: milvus-remote
+      #  provider_type: remote::milvus
+      #  config:
+      #    uri: ${env.MILVUS_ENDPOINT}
+      #    token: ${env.MILVUS_TOKEN}
+      #    persistence:
+      #      namespace: vector_io::milvus-remote
+      #      backend: kv_default
+      - provider_id: milvus
         provider_type: inline::milvus
         config:
-          db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus.db}
+          db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus_local.db}
           persistence:
             namespace: vector_io::milvus-local
             backend: kv_default
@@ -168,20 +169,29 @@ data:
     storage:
       backends:
         kv_default:
-          type: kv_postgres
-          host: ${env.POSTGRES_HOST:=localhost}
-          port: ${env.POSTGRES_PORT:=5432}
-          db: ${env.POSTGRES_DB:=llamastack}
-          user: ${env.POSTGRES_USER:=llamastack}
-          password: ${env.POSTGRES_PASSWORD:=llamastack}
-          table_name: kv_default
+          type: kv_sqlite
+          db_path: /llama-storage/kv_store.db
         sql_default:
-          type: sql_postgres
-          host: ${env.POSTGRES_HOST:=localhost}
-          port: ${env.POSTGRES_PORT:=5432}
-          db: ${env.POSTGRES_DB:=llamastack}
-          user: ${env.POSTGRES_USER:=llamastack}
-          password: ${env.POSTGRES_PASSWORD:=llamastack}
+          type: sql_sqlite
+          db_path: /llama-storage/sql_store.db
+
+        # Disabled due to bug where responses API history is not being stored
+        #
+        #kv_default:
+        #  type: kv_postgres
+        #  host: ${env.POSTGRES_HOST:=localhost}
+        #  port: ${env.POSTGRES_PORT:=5432}
+        #  db: ${env.POSTGRES_DB_KV:=llamastack_kv}
+        #  user: ${env.POSTGRES_USER:=llamastack}
+        #  password: ${env.POSTGRES_PASSWORD:=llamastack}
+        #  table_name: kv_default
+        #sql_default:
+        #  type: sql_postgres
+        #  host: ${env.POSTGRES_HOST:=localhost}
+        #  port: ${env.POSTGRES_PORT:=5432}
+        #  db: ${env.POSTGRES_DB_SQL:=llamastack_sql}
+        #  user: ${env.POSTGRES_USER:=llamastack}
+        #  password: ${env.POSTGRES_PASSWORD:=llamastack}
       stores:
         metadata:
           namespace: registry
@@ -194,6 +204,9 @@ data:
         conversations:
           table_name: openai_conversations
           backend: sql_default
+        prompts:
+          namespace: prompts
+          backend: kv_default
     registered_resources:
       models:
       - metadata:
@@ -207,6 +220,18 @@ data:
         model_id: granite-embedding-125m
         provider_id: sentence-transformers
         provider_model_id: ibm-granite/granite-embedding-125m-english
+        model_type: embedding
+      - metadata:
+          embedding_dimension: 768
+        model_id: all-mpnet-base-v2
+        provider_id: sentence-transformers
+        provider_model_id: sentence-transformers/all-mpnet-base-v2
+        model_type: embedding
+      - metadata:
+          embedding_dimension: 256
+        model_id: nomic-embed-text-v1.5
+        provider_id: sentence-transformers
+        provider_model_id: nomic-ai/nomic-embed-text-v1.5
         model_type: embedding
       shields:
       - shield_id: llama-guard
@@ -233,9 +258,9 @@ data:
         provider_id: model-context-protocol
         mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/sse}
 
-      - toolgroup_id: mcp::agent-game
-        provider_id: model-context-protocol
-        mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+      #- toolgroup_id: mcp::agent-game
+      #  provider_id: model-context-protocol
+      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/sse}
 
       - toolgroup_id: mcp::agent-team
         provider_id: model-context-protocol
@@ -244,7 +269,7 @@ data:
     telemetry:
       enabled: true
     vector_stores:
-      default_provider_id: faiss
+      default_provider_id: milvus
       default_embedding_model:
         provider_id: sentence-transformers
-        model_id: nomic-ai/nomic-embed-text-v1.5
+        model_id: sentence-transformers/all-mpnet-base-v2
