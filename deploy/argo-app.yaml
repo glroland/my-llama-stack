@@ -8,7 +8,7 @@ spec:
     namespace: my-llama-stack
     server: https://kubernetes.default.svc
   source:
-    path: deploy/helm
+    path: deploy/helm-as-standalone_deployment
     repoURL: https://github.com/glroland/my-llama-stack.git
     targetRevision: HEAD
     helm:
