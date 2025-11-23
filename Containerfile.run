@@ -42,3 +42,10 @@ RUN apt-get update && \
 #RUN dnf module enable -y nodejs:18 && \
 #    dnf install -y nodejs npm && \
 #    dnf clean all
+
+
+RUN chown -R 1001 /.llama
+
+USER 1001
+
+ENTRYPOINT ["/usr/local/bin/llama-stack-entrypoint.sh"]
