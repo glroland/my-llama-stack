@@ -8,7 +8,7 @@ immutable: false
 data:
   INFERENCE_MODEL: "gpt-4o-mini"
   EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
-  OLLAMA_URL: "http://envision.home.glroland.com:11434"
+  OLLAMA_URL: "http://evolve.home.glroland.com:11434"
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
   MILVUS_TOKEN: "root:Milvus"
   LLAMA_STACK_LOGGING: "all=info"
@@ -38,10 +38,10 @@ data:
     - batches
     providers:
       inference:
-      #- provider_id: ollama
-      #  provider_type: remote::ollama
-      #  config:
-      #    url: ${env.OLLAMA_URL:=http://localhost:11434}
+      - provider_id: ollama
+        provider_type: remote::ollama
+        config:
+          url: ${env.OLLAMA_URL:=http://localhost:11434}
       - provider_id: sentence-transformers
         provider_type: inline::sentence-transformers
         config: {}
@@ -250,21 +250,21 @@ data:
       - toolgroup_id: builtin::rag
         provider_id: rag-runtime
 
-      - toolgroup_id: mcp::ansible-mcp
-        provider_id: model-context-protocol
-        mcp_endpoint: {uri: https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com/sse}
+      #- toolgroup_id: mcp::ansible-mcp
+      #  provider_id: model-context-protocol
+      #  mcp_endpoint: {uri: https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com/sse}
 
       - toolgroup_id: mcp::agent-utilities
         provider_id: model-context-protocol
-        mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+        mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
 
-      #- toolgroup_id: mcp::agent-game
-      #  provider_id: model-context-protocol
-      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+      - toolgroup_id: mcp::agent-game
+        provider_id: model-context-protocol
+        mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
 
       - toolgroup_id: mcp::agent-team
         provider_id: model-context-protocol
-        mcp_endpoint: {uri: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+        mcp_endpoint: {uri: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
 
     telemetry:
       enabled: true
