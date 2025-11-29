@@ -254,17 +254,17 @@ data:
       #  provider_id: model-context-protocol
       #  mcp_endpoint: {uri: https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com/sse}
 
-      - toolgroup_id: mcp::agent-utilities
-        provider_id: model-context-protocol
-        mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
+      #- toolgroup_id: mcp::agent-utilities
+      #  provider_id: model-context-protocol
+      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
 
-      - toolgroup_id: mcp::agent-game
-        provider_id: model-context-protocol
-        mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
+      #- toolgroup_id: mcp::agent-game
+      #  provider_id: model-context-protocol
+      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
 
-      - toolgroup_id: mcp::agent-team
-        provider_id: model-context-protocol
-        mcp_endpoint: {uri: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
+      #- toolgroup_id: mcp::agent-team
+      #  provider_id: model-context-protocol
+      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
 
     telemetry:
       enabled: true
