@@ -42,16 +42,21 @@ data:
       #  provider_type: remote::ollama
       #  config:
       #    url: ${env.OLLAMA_URL:=http://localhost:11434}
-      - provider_id: vllm
-        provider_type: remote::vllm
-        config:
-          url: ${env.VLLM_URL:=http://gpt-oss-20b-predictor.sandbox.svc.cluster.local:8080/v1}
-          max_tokens: ${env.VLLM_MAX_TOKENS:=8192}
-          api_token: ${env.VLLM_API_TOKEN:=fake}
-          tls_verify: ${env.VLLM_TLS_VERIFY:=false}
+      #- provider_id: vllm
+      #  provider_type: remote::vllm
+      #  config:
+      #    url: ${env.VLLM_URL:=http://gpt-oss-20b-predictor.sandbox.svc.cluster.local:8080/v1}
+      #    max_tokens: ${env.VLLM_MAX_TOKENS:=8192}
+      #    api_token: ${env.VLLM_API_TOKEN:=fake}
+      #    tls_verify: ${env.VLLM_TLS_VERIFY:=false}
       - provider_id: sentence-transformers
         provider_type: inline::sentence-transformers
         config: {}
+      - provider_id: lab_evolve
+        provider_type: remote::openai
+        config:
+          base_url: http://evolve.home.glroland.com:8080/v1
+          api_key: ${env.OPENAI_API_KEY:=nokeyneeded}
       - provider_id: openai
         provider_type: remote::openai
         config:
