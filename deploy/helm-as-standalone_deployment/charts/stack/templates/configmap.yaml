@@ -71,12 +71,13 @@ data:
           url: https://api.together.xyz/v1
           api_key: ${env.TOGETHER_API_KEY:=null}
       vector_io:
-      #- provider_id: faiss
-      #  provider_type: inline::faiss
-      #  config:
-      #    persistence:
-      #      namespace: vector_io::faiss
-      #      backend: kv_default
+      - provider_id: faiss
+        provider_type: inline::faiss
+        config:
+          db_path: ${env.FAIIS_DB_PATH:=/llama-storage/faiis_local.db}
+          persistence:
+            namespace: vector_io::faiss
+            backend: kv_default
       #- provider_id: milvus-remote
       #  provider_type: remote::milvus
       #  config:
