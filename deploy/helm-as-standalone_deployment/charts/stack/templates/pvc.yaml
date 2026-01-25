@@ -9,3 +9,4 @@ spec:
     requests:
       storage: 20Gi
   volumeMode: Filesystem
+  storageClassName: ocs-external-storagecluster-ceph-rbd
