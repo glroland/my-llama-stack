@@ -8,7 +8,7 @@ immutable: false
 data:
   INFERENCE_MODEL: "gpt-4o-mini"
   EMBEDDING_MODEL: "sentence-transformers/all-mpnet-base-v2"
-  OLLAMA_URL: "http://evolve.home.glroland.com:11434"
+  OLLAMA_URL: "http://evolvewired.home.glroland.com:11434"
   MILVUS_ENDPOINT: "http://db.home.glroland.com:19530"
   MILVUS_TOKEN: "root:Milvus"
   LLAMA_STACK_LOGGING: "all=info"
@@ -55,7 +55,7 @@ data:
       - provider_id: lab_evolve
         provider_type: remote::openai
         config:
-          base_url: http://evolve.home.glroland.com:8080/v1
+          base_url: http://evolvewired.home.glroland.com:8080/v1
           api_key: ${env.OPENAI_API_KEY:=nokeyneeded}
       - provider_id: openai
         provider_type: remote::openai
