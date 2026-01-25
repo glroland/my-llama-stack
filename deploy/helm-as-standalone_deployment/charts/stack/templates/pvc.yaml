@@ -9,4 +9,4 @@ spec:
     requests:
       storage: 20Gi
   volumeMode: Filesystem
-  storageClassName: ocs-external-storagecluster-ceph-rbd
+  storageClassName: static-nfs-storage-class

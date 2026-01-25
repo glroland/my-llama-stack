@@ -11,4 +11,4 @@ spec:
   nfs:
     path: /lls_storage
     server: rack.home.glroland.com
-  storageClassName: {{ include "my-llama-stack.fullname" . }}-pv-storage-class
+  storageClassName: static-nfs-storage-class
