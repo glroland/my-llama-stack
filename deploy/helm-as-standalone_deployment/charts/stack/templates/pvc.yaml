@@ -9,4 +9,3 @@ spec:
     requests:
       storage: 20Gi
   volumeMode: Filesystem
-  storageClassName: {{ include "my-llama-stack.fullname" . }}-pv-storage-class
