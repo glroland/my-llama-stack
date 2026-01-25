@@ -1,6 +1,6 @@
 apiVersion: v2
-name: ui
-description: My LLama Stack Distribution's UI
+name: stack
+description: My LLama Stack Distribution Helm Cart
 
 # A chart can be either an 'application' or a 'library' chart.
 #

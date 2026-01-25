@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  name: my-llama-stack-ui
+  name: my-llama-stack
   port: 8080
 
 nameOverride: ""
@@ -16,11 +16,11 @@ ingress:
 
 resources: 
   limits:
-    cpu: 1000m
-    memory: 1Gi
+    cpu: 5000m
+    memory: 16Gi
   requests:
-    cpu: 250m
-    memory: 500Mi
+    cpu: 5000m
+    memory: 16Gi
 
 autoscaling:
   enabled: false

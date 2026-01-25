@@ -1,0 +1,259 @@
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: llama-stack-config
+  labels:
+    llamastack.io/distribution: lsd-genai-playground
+    opendatahub.io/dashboard: 'true'
+data:
+  run.yaml: |-
+    version: '2'
+    image_name: my-llama-stack
+    apis:
+    - inference
+    - vector_io
+    - safety
+    - agents
+    - eval
+    - datasetio
+    - scoring
+    - tool_runtime
+    - files
+    - batches
+    providers:
+      inference:
+      #- provider_id: ollama
+      #  provider_type: remote::ollama
+      #  config:
+      #    url: ${env.OLLAMA_URL:=http://localhost:11434}
+      - provider_id: sentence-transformers
+        provider_type: inline::sentence-transformers
+        config: {}
+      - provider_id: openai
+        provider_type: remote::openai
+        config:
+          api_key: ${env.OPENAI_API_KEY:=nokeyneeded}
+      - provider_id: anthropic
+        provider_type: remote::anthropic
+        config:
+          api_key: ${env.ANTHROPIC_API_KEY:=nokeyneeded}
+      - provider_id: together
+        provider_type: remote::together
+        config:
+          url: https://api.together.xyz/v1
+          api_key: ${env.TOGETHER_API_KEY:=null}
+      vector_io:
+      #- provider_id: faiss
+      #  provider_type: inline::faiss
+      #  config:
+      #    persistence:
+      #      namespace: vector_io::faiss
+      #      backend: kv_default
+      #- provider_id: milvus-remote
+      #  provider_type: remote::milvus
+      #  config:
+      #    uri: ${env.MILVUS_ENDPOINT}
+      #    token: ${env.MILVUS_TOKEN}
+      #    persistence:
+      #      namespace: vector_io::milvus-remote
+      #      backend: kv_default
+      - provider_id: milvus
+        provider_type: inline::milvus
+        config:
+          db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus_local.db}
+          persistence:
+            namespace: vector_io::milvus-local
+            backend: kv_default
+      files:
+      - provider_id: meta-reference-files
+        provider_type: inline::localfs
+        config:
+          storage_dir: ${env.FILES_STORAGE_DIR:=/llama-storage/files}
+          metadata_store:
+            table_name: files_metadata
+            backend: sql_default
+      safety:
+      - provider_id: llama-guard
+        provider_type: inline::llama-guard
+        config:
+          excluded_categories: []
+      - provider_id: code-scanner
+        provider_type: inline::code-scanner
+      agents:
+      - provider_id: meta-reference
+        provider_type: inline::meta-reference
+        config:
+          persistence:
+            agent_state:
+              namespace: agents
+              backend: kv_default
+            responses:
+              table_name: responses
+              backend: sql_default
+              max_write_queue_size: 10000
+              num_writers: 4
+      post_training:
+      - provider_id: torchtune-cpu
+        provider_type: inline::torchtune-cpu
+        config:
+          checkpoint_format: meta
+      eval:
+      - provider_id: meta-reference
+        provider_type: inline::meta-reference
+        config:
+          kvstore:
+            namespace: eval
+            backend: kv_default
+      datasetio:
+      - provider_id: huggingface
+        provider_type: remote::huggingface
+        config:
+          kvstore:
+            namespace: datasetio::huggingface
+            backend: kv_default
+      - provider_id: localfs
+        provider_type: inline::localfs
+        config:
+          kvstore:
+            namespace: datasetio::localfs
+            backend: kv_default
+      scoring:
+      - provider_id: basic
+        provider_type: inline::basic
+        config: {}
+      - provider_id: llm-as-judge
+        provider_type: inline::llm-as-judge
+        config: {}
+      - provider_id: braintrust
+        provider_type: inline::braintrust
+        config:
+          openai_api_key: ${env.OPENAI_API_KEY:=null}
+      tool_runtime:
+      - provider_id: tavily-search
+        provider_type: remote::tavily-search
+        config:
+          api_key: ${env.TAVILY_SEARCH_API_KEY:=null}
+          max_results: 3
+      - provider_id: rag-runtime
+        provider_type: inline::rag-runtime
+        config: {}
+      - provider_id: model-context-protocol
+        provider_type: remote::model-context-protocol
+        config: {}
+      batches:
+      - provider_id: reference
+        provider_type: inline::reference
+        config:
+          kvstore:
+            namespace: batches
+            backend: kv_default
+    logging: null
+    server:
+      port: {{ .Values.image.port }}
+    storage:
+      backends:
+        kv_default:
+          type: kv_sqlite
+          db_path: /llama-storage/kv_store.db
+        sql_default:
+          type: sql_sqlite
+          db_path: /llama-storage/sql_store.db
+
+        # Disabled due to bug where responses API history is not being stored
+        #
+        #kv_default:
+        #  type: kv_postgres
+        #  host: ${env.POSTGRES_HOST:=localhost}
+        #  port: ${env.POSTGRES_PORT:=5432}
+        #  db: ${env.POSTGRES_DB_KV:=llamastack_kv}
+        #  user: ${env.POSTGRES_USER:=llamastack}
+        #  password: ${env.POSTGRES_PASSWORD:=llamastack}
+        #  table_name: kv_default
+        #sql_default:
+        #  type: sql_postgres
+        #  host: ${env.POSTGRES_HOST:=localhost}
+        #  port: ${env.POSTGRES_PORT:=5432}
+        #  db: ${env.POSTGRES_DB_SQL:=llamastack_sql}
+        #  user: ${env.POSTGRES_USER:=llamastack}
+        #  password: ${env.POSTGRES_PASSWORD:=llamastack}
+      stores:
+        metadata:
+          namespace: registry
+          backend: kv_default
+        inference:
+          table_name: inference_store
+          backend: sql_default
+          max_write_queue_size: 10000
+          num_writers: 4
+        conversations:
+          table_name: openai_conversations
+          backend: sql_default
+        prompts:
+          namespace: prompts
+          backend: kv_default
+    registered_resources:
+      models:
+      - metadata:
+          embedding_dimension: 3072
+        model_id: text-embedding-3-large
+        provider_id: openai
+        provider_model_id: text-embedding-3-large
+        model_type: embedding
+      - metadata:
+          embedding_dimension: 768
+        model_id: granite-embedding-125m
+        provider_id: sentence-transformers
+        provider_model_id: ibm-granite/granite-embedding-125m-english
+        model_type: embedding
+      - metadata:
+          embedding_dimension: 768
+        model_id: all-mpnet-base-v2
+        provider_id: sentence-transformers
+        provider_model_id: sentence-transformers/all-mpnet-base-v2
+        model_type: embedding
+      - metadata:
+          embedding_dimension: 256
+        model_id: nomic-embed-text-v1.5
+        provider_id: sentence-transformers
+        provider_model_id: nomic-ai/nomic-embed-text-v1.5
+        model_type: embedding
+      shields:
+      - shield_id: llama-guard
+        provider_id: ${env.SAFETY_MODEL:+llama-guard}
+        provider_shield_id: ${env.SAFETY_MODEL:=}
+      - shield_id: code-scanner
+        provider_id: ${env.CODE_SCANNER_MODEL:+code-scanner}
+        provider_shield_id: ${env.CODE_SCANNER_MODEL:=}
+      vector_dbs: []
+      datasets: []
+      scoring_fns: []
+      benchmarks: []
+      tool_groups:
+      - toolgroup_id: builtin::websearch
+        provider_id: tavily-search
+      - toolgroup_id: builtin::rag
+        provider_id: rag-runtime
+
+      - toolgroup_id: mcp::ansible-mcp
+        provider_id: model-context-protocol
+        mcp_endpoint: {uri: https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com/sse}
+
+      - toolgroup_id: mcp::agent-utilities
+        provider_id: model-context-protocol
+        mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+
+      #- toolgroup_id: mcp::agent-game
+      #  provider_id: model-context-protocol
+      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+
+      - toolgroup_id: mcp::agent-team
+        provider_id: model-context-protocol
+        mcp_endpoint: {uri: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/sse}
+
+    telemetry:
+      enabled: true
+    vector_stores:
+      default_provider_id: milvus
+      default_embedding_model:
+        provider_id: sentence-transformers
+        model_id: sentence-transformers/all-mpnet-base-v2

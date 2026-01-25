@@ -1,0 +1,75 @@
+apiVersion: llamastack.io/v1alpha1
+kind: LlamaStackDistribution
+metadata:
+  annotations:
+    openshift.io/display-name: lsd-genai-playground
+  name: lsd-genai-playground
+  labels:
+    opendatahub.io/dashboard: 'true'
+spec:
+  replicas: 1
+  server:
+    containerSpec:
+      command:
+        - /bin/sh
+        - '-c'
+        - llama stack run /etc/llama-stack/run.yaml
+      env:
+        - name: VLLM_TLS_VERIFY
+          value: 'false'
+        - name: MILVUS_DB_PATH
+          value: ~/.llama/milvus.db
+        - name: FMS_ORCHESTRATOR_URL
+          value: 'http://localhost'
+        - name: VLLM_MAX_TOKENS
+          value: '4096'
+        - name: VLLM_API_TOKEN_1
+          value: fake
+        - name: LLAMA_STACK_CONFIG_DIR
+          value: /opt/app-root/src/.llama/distributions/rh/
+        - name: INFERENCE_MODEL
+          value: "gpt-4o-mini"
+        - name: EMBEDDING_MODEL
+          value: "sentence-transformers/all-mpnet-base-v2"
+        - name: OLLAMA_URL
+          value: "http://envision.home.glroland.com:11434"
+        - name: MILVUS_ENDPOINT
+          value: "http://db.home.glroland.com:19530"
+        - name: MILVUS_TOKEN
+          value: "root:Milvus"
+        - name: LLAMA_STACK_LOGGING
+          value: "all=info"
+        - name: OTEL_EXPORTER_OTLP_ENDPOINT
+          value: "http://eclipse.home.glroland.com:4318"
+        - name: OTEL_SERVICE_NAME
+          value: "my-llama-stack"
+        - name: POSTGRES_HOST
+          value: "db.home.glroland.com"
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_DB_SQL
+          value: "llamastack_sql"
+        - name: POSTGRES_DB_KV
+          value: "llamastack_kv"
+        - name: POSTGRES_USER
+          value: "llamastack"
+        - name: POSTGRES_PASSWORD
+          value: "llamastack"
+        - name: FILES_STORAGE_DIR
+          value: "/llama-storage/files"
+      name: llama-stack
+      port: 8321
+      resources:
+        limits:
+          cpu: '2'
+          memory: 12Gi
+        requests:
+          cpu: 250m
+          memory: 500Mi
+    distribution:
+      image: "{{ .Values.global.image.repository }}{{ .Values.image.name }}:{{ .Values.global.image.tag }}"
+    userConfig:
+      configMapName: llama-stack-config
+    storage:
+      size: "20Gi"
+      mountPath: "/llama-storage"
