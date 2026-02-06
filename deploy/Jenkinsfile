@@ -4,7 +4,7 @@ pipeline
 
    environment
    {
-      LLAMA_STACK_VERSION = "v0.4.2"
+      LLAMA_STACK_VERSION = "v0.5.0"
       LLAMA_STACK_DISTRO_NAME = "starter"
    }
 
