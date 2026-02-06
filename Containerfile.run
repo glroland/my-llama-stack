@@ -23,7 +23,7 @@ RUN rm -rf /.cache && \
     ln -s /llama-storage /.cache
 
 # Download Hugging Face Models
-RUN hf download sentence-transformers/all-mpnet-base-v2 --exclude "onnx/*" "openvino/*"
+RUN hf download sentence-transformers/all-mpnet-base-v2 --exclude "onnx/*" --exclude "openvino/*"
 RUN hf download nomic-ai/nomic-embed-text-v1.5 --exclude "onnx/*"
 RUN hf download ibm-granite/granite-embedding-125m-english
 
@@ -42,7 +42,6 @@ RUN apt-get update && \
 #RUN dnf module enable -y nodejs:18 && \
 #    dnf install -y nodejs npm && \
 #    dnf clean all
-
 
 RUN chown -R 1001 /.llama
 
