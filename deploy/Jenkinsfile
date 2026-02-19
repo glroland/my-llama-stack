@@ -4,14 +4,14 @@ pipeline
 
    environment
    {
-      LLAMA_STACK_VERSION = "v0.5.0"
+      LLAMA_STACK_VERSION = "v0.5.1"
       LLAMA_STACK_DISTRO_NAME = "starter"
    }
 
    options 
    {
       disableConcurrentBuilds()
-      buildDiscarder(logRotator(numToKeepStr: '3'))
+      buildDiscarder(logRotator(numToKeepStr: '2'))
    }
 
    stages
