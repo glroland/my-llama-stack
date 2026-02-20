@@ -48,6 +48,7 @@ distribution_spec:
     - provider_type: inline::reference
 image_type: container
 additional_pip_packages:
+- setuptools
 - sqlalchemy[asyncio]
 - asyncpg
 - psycopg2-binary
