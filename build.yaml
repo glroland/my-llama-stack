@@ -46,8 +46,7 @@ distribution_spec:
     - provider_type: inline::reference
 image_type: container
 additional_pip_packages:
-- setuptools
+- setuptools==81.0.0
 - sqlalchemy[asyncio]
 - asyncpg
 - psycopg2-binary
-- pymilvus[milvus_lite]
