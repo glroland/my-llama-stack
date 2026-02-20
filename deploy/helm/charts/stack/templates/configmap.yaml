@@ -78,21 +78,22 @@ data:
           persistence:
             namespace: vector_io::faiss
             backend: kv_default
-      #- provider_id: milvus-remote
-      #  provider_type: remote::milvus
-      #  config:
-      #    uri: ${env.MILVUS_ENDPOINT}
-      #    token: ${env.MILVUS_TOKEN}
-      #    persistence:
-      #      namespace: vector_io::milvus-remote
-      #      backend: kv_default
       - provider_id: milvus
-        provider_type: inline::milvus
+        provider_type: remote::milvus
         config:
-          db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus_local.db}
+          uri: ${env.MILVUS_ENDPOINT}
+          token: ${env.MILVUS_TOKEN}
           persistence:
-            namespace: vector_io::milvus-local
+            namespace: vector_io::milvus-remote
             backend: kv_default
+      # Bug in latest llama stack minor release version.  can't work through it with dependency fixes.
+      #- provider_id: milvus
+      #  provider_type: inline::milvus
+      #  config:
+      #    db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus_local.db}
+      #    persistence:
+      #      namespace: vector_io::milvus-local
+      #      backend: kv_default
       files:
       - provider_id: meta-reference-files
         provider_type: inline::localfs
