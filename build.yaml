@@ -17,6 +17,7 @@ distribution_spec:
     vector_io:
     - provider_type: inline::faiss
     - provider_type: remote::milvus
+    - provider_type: inline::milvus
     - provider_type: remote::pgvector
     files:
     - provider_type: inline::localfs
@@ -25,10 +26,7 @@ distribution_spec:
     - provider_type: inline::code-scanner
     agents:
     - provider_type: inline::meta-reference
-    #telemetry:
-    #- provider_type: inline::meta-reference
     post_training:
-#    - provider_type: inline::huggingface
     - provider_type: inline::torchtune-cpu
     eval:
     - provider_type: inline::meta-reference
