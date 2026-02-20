@@ -51,3 +51,4 @@ additional_pip_packages:
 - sqlalchemy[asyncio]
 - asyncpg
 - psycopg2-binary
+- pymilvus[milvus_lite]
