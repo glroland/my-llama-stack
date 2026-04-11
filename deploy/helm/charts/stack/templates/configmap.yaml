@@ -38,6 +38,7 @@ data:
     - tool_runtime
     - vector_io
     - datasetio
+    - scoring
     providers:
       inference:
       - provider_id: sentence-transformers
