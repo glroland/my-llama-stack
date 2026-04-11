@@ -31,7 +31,6 @@ data:
     - file_processors
     - files
     - inference
-    - interactions
     - responses
     - safety
     - tool_runtime
