@@ -37,6 +37,7 @@ data:
     - safety
     - tool_runtime
     - vector_io
+    - datasetio
     providers:
       inference:
       - provider_id: sentence-transformers
