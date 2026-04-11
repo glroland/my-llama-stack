@@ -32,7 +32,6 @@ data:
     - files
     - inference
     - interactions
-    - messages
     - responses
     - safety
     - tool_runtime
