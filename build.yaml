@@ -4,21 +4,21 @@ distribution_spec:
   container_image: null #registry.access.redhat.com/ubi9/python-311:9.6-1747333117
   providers:
     inference:
-    - provider_type: remote::ollama
+#    - provider_type: remote::ollama
     - provider_type: inline::sentence-transformers
     - provider_type: remote::vllm
     - provider_type: remote::openai
-    - provider_type: remote::bedrock
-    - provider_type: remote::passthrough
+#    - provider_type: remote::bedrock
+#    - provider_type: remote::passthrough
     - provider_type: remote::together
     - provider_type: remote::anthropic
-    - provider_type: remote::azure
-    - provider_type: remote::vertexai
+#    - provider_type: remote::azure
+#    - provider_type: remote::vertexai
     vector_io:
     - provider_type: inline::faiss
     - provider_type: remote::milvus
-    - provider_type: inline::milvus
-    - provider_type: remote::pgvector
+#    - provider_type: inline::milvus
+#    - provider_type: remote::pgvector
     files:
     - provider_type: inline::localfs
     safety:
@@ -36,12 +36,12 @@ distribution_spec:
     scoring:
     - provider_type: inline::basic
     - provider_type: inline::llm-as-judge
-    - provider_type: inline::braintrust
+#    - provider_type: inline::braintrust
     tool_runtime:
-    - provider_type: remote::tavily-search
+#    - provider_type: remote::tavily-search
     - provider_type: inline::rag-runtime
     - provider_type: remote::model-context-protocol
-    - provider_type: remote::wolfram-alpha
+#    - provider_type: remote::wolfram-alpha
     batches:
     - provider_type: inline::reference
 image_type: container
