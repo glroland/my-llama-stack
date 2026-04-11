@@ -105,12 +105,6 @@ data:
           excluded_categories: []
       - provider_id: code-scanner
         provider_type: inline::code-scanner
-      interactions:
-      - provider_id: builtin
-        provider_type: inline::builtin
-      messages:
-      - provider_id: builtin
-        provider_type: inline::builtin
       responses:
       - provider_id: builtin
         provider_type: inline::builtin
