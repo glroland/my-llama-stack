@@ -27,37 +27,38 @@ data:
     version: '2'
     image_name: my-llama-stack
     apis:
-    - inference
-    - vector_io
-    - safety
-    - agents
-    - eval
-    - datasetio
-    - scoring
-    - tool_runtime
-    - files
     - batches
+    - file_processors
+    - files
+    - inference
+    - interactions
+    - messages
+    - responses
+    - safety
+    - tool_runtime
+    - vector_io
     providers:
       inference:
-      #- provider_id: ollama
-      #  provider_type: remote::ollama
-      #  config:
-      #    url: ${env.OLLAMA_URL:=http://localhost:11434}
-      #- provider_id: vllm
-      #  provider_type: remote::vllm
-      #  config:
-      #    url: ${env.VLLM_URL:=http://gpt-oss-20b-predictor.sandbox.svc.cluster.local:8080/v1}
-      #    max_tokens: ${env.VLLM_MAX_TOKENS:=8192}
-      #    api_token: ${env.VLLM_API_TOKEN:=fake}
-      #    tls_verify: ${env.VLLM_TLS_VERIFY:=false}
       - provider_id: sentence-transformers
         provider_type: inline::sentence-transformers
-        config: {}
+        config:
+          trust_remote_code: false
+      - provider_id: transformers
+        provider_type: inline::transformers
       - provider_id: lab_evolve
         provider_type: remote::openai
         config:
           base_url: http://evolvewired.home.glroland.com:8080/v1
           api_key: ${env.OPENAI_API_KEY:=nokeyneeded}
+      #- provider_id: ${env.VLLM_URL:+vllm}
+      #  provider_type: remote::vllm
+      #  config:
+      #    base_url: ${env.VLLM_URL:=}
+      #    max_tokens: ${env.VLLM_MAX_TOKENS:=4096}
+      #    api_token: ${env.VLLM_API_TOKEN:=fake}
+      #    network:
+      #      tls:
+      #        verify: ${env.VLLM_TLS_VERIFY:=true}
       - provider_id: openai
         provider_type: remote::openai
         config:
@@ -79,22 +80,13 @@ data:
           persistence:
             namespace: vector_io::faiss
             backend: kv_default
-      - provider_id: milvus
-        provider_type: remote::milvus
+      - provider_id: ${env.MILVUS_URL:+milvus}
+        provider_type: inline::milvus
         config:
-          uri: ${env.MILVUS_ENDPOINT}
-          token: ${env.MILVUS_TOKEN}
+          db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus.db
           persistence:
-            namespace: vector_io::milvus-remote
+            namespace: vector_io::milvus
             backend: kv_default
-      # Bug in latest llama stack minor release version.  can't work through it with dependency fixes.
-      #- provider_id: milvus
-      #  provider_type: inline::milvus
-      #  config:
-      #    db_path: ${env.MILVUS_DB_PATH:=/llama-storage/milvus_local.db}
-      #    persistence:
-      #      namespace: vector_io::milvus-local
-      #      backend: kv_default
       files:
       - provider_id: meta-reference-files
         provider_type: inline::localfs
@@ -103,6 +95,9 @@ data:
           metadata_store:
             table_name: files_metadata
             backend: sql_default
+      file_processors:
+      - provider_id: pypdf
+        provider_type: inline::pypdf
       safety:
       - provider_id: llama-guard
         provider_type: inline::llama-guard
@@ -110,9 +105,15 @@ data:
           excluded_categories: []
       - provider_id: code-scanner
         provider_type: inline::code-scanner
-      agents:
-      - provider_id: meta-reference
-        provider_type: inline::meta-reference
+      interactions:
+      - provider_id: builtin
+        provider_type: inline::builtin
+      messages:
+      - provider_id: builtin
+        provider_type: inline::builtin
+      responses:
+      - provider_id: builtin
+        provider_type: inline::builtin
         config:
           persistence:
             agent_state:
@@ -123,11 +124,6 @@ data:
               backend: sql_default
               max_write_queue_size: 10000
               num_writers: 4
-      post_training:
-      - provider_id: torchtune-cpu
-        provider_type: inline::torchtune-cpu
-        config:
-          checkpoint_format: meta
       eval:
       - provider_id: meta-reference
         provider_type: inline::meta-reference
@@ -222,6 +218,9 @@ data:
         prompts:
           namespace: prompts
           backend: kv_default
+        connectors:
+          namespace: connectors
+          backend: kv_default
     registered_resources:
       models:
       - metadata:
@@ -264,23 +263,6 @@ data:
         provider_id: tavily-search
       - toolgroup_id: builtin::rag
         provider_id: rag-runtime
-
-      #- toolgroup_id: mcp::ansible-mcp
-      #  provider_id: model-context-protocol
-      #  mcp_endpoint: {uri: https://ansible-mcp-ansible-mcp.apps.ocp.home.glroland.com/sse}
-
-      #- toolgroup_id: mcp::agent-utilities
-      #  provider_id: model-context-protocol
-      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-utilities-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
-
-      #- toolgroup_id: mcp::agent-game
-      #  provider_id: model-context-protocol
-      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-game-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
-
-      #- toolgroup_id: mcp::agent-team
-      #  provider_id: model-context-protocol
-      #  mcp_endpoint: {uri: https://baseball-chatbot-agent-team-baseball-chatbot.apps.ocp.home.glroland.com/mcp}
-
     telemetry:
       enabled: true
     vector_stores:
@@ -288,3 +270,60 @@ data:
       default_embedding_model:
         provider_id: sentence-transformers
         model_id: sentence-transformers/all-mpnet-base-v2
+      default_reranker_model:
+        provider_id: transformers
+        model_id: Qwen/Qwen3-Reranker-0.6B
+      file_search_params:
+        header_template: 'file_search tool found {num_chunks} chunks:
+
+          BEGIN of file_search tool results.
+
+          '
+        footer_template: 'END of file_search tool results.
+
+          '
+      context_prompt_params:
+        chunk_annotation_template: 'Result {index}
+
+          Content: {chunk.content}
+
+          Metadata: {metadata}
+
+          '
+        context_template: 'The above results were retrieved to help answer the user''s
+          query: "{query}". Use them as supporting information only in answering this
+          query. {annotation_instruction}
+
+          '
+      annotation_prompt_params:
+        enable_annotations: true
+        annotation_instruction_template: Cite sources immediately at the end of sentences
+          before punctuation, using `<|file-id|>` format like 'This is a fact <|file-Cn3MSNn72ENTiiq11Qda4A|>.'.
+          Do not add extra punctuation. Use only the file IDs provided, do not invent
+          new ones.
+        chunk_annotation_template: '[{index}] {metadata_text} cite as <|{file_id}|>
+
+          {chunk_text}
+
+          '
+      file_ingestion_params:
+        default_chunk_size_tokens: 512
+        default_chunk_overlap_tokens: 128
+      chunk_retrieval_params:
+        chunk_multiplier: 5
+        max_tokens_in_context: 4000
+        default_reranker_strategy: rrf
+        rrf_impact_factor: 60.0
+        weighted_search_alpha: 0.5
+        default_search_mode: vector
+      file_batch_params:
+        max_concurrent_files_per_batch: 3
+        file_batch_chunk_size: 10
+        cleanup_interval_seconds: 86400
+      contextual_retrieval_params:
+        default_timeout_seconds: 120
+        default_max_concurrency: 3
+        max_document_tokens: 100000
+    safety:
+      default_shield_id: llama-guard
+    connectors: []
